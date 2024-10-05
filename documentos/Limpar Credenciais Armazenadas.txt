@@ -1,0 +1,10 @@
+2. Limpar Credenciais Armazenadas
+Se você estiver usando um gerenciador de credenciais que armazena as credenciais anteriores, pode ser necessário limpar essas credenciais. Dependendo do sistema operacional, o processo pode variar:
+
+Windows
+Abra o Painel de Controle.
+Vá para Gerenciador de Credenciais.
+Procure por entradas relacionadas ao GitHub e exclua-as.
+macOS
+Abra o Acesso às Chaves (Keychain Access).
+Busque por entradas do GitHub e exclua as que estiverem lá.
