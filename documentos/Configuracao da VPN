@@ -1,0 +1,40 @@
+Olá Sr. João! Segue abaixo os dados de acesso criados para o seu serviço ICUS.
+
+#################
+
+Proceder com a instalação do FortiClient conforme tutorial, e abaixo seguem as credenciais indicadas no documento
+vpn,folpag
+
+VPN IPSEC JOAO ALEXANDRE
+
+Pre Shared Key = Das4e72GbcLh1hPQWmbiu
+
+Peer ID = icusjalexandre
+
+Usuário = joao.alexandre1
+Senha = 72jyRMquB1r1
+
+Usuário = joao.alexandre2
+Senha = h2KUJ20Xtl4h
+
+########################
+
+O acesso aos servidores, após a conexão de VPN, deverá ser feito por terminal server (MSTSC), conforme abaixo:
+
+Servidores Windows
+
+172.25.0.2
+172.25.0.3
+
+Acesso via Remote Desktop
+
+Usuário = administrador
+Senha = @t69#dcYhn6#Xj05
+
+
+O Sr. baixou esse forticlient agora?
+
+vamos instalar a versaro correta, vai precisar reinciar a maquina e depois instalar esse ultimo que baixei
+
+Reinicia a maquina quando puder, e reinstalar esse que baixamos, ai refaz a configuração novamente da mesma forma  (lembrando fo VPN IPSEC, depois testa, dando problema ou certo me avisa)
+ok pode reiniciar 

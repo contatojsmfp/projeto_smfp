@@ -1,22 +1,13 @@
-CREATE DATABASE FolhaPagamento
-ON PRIMARY (
-    NAME = 'FolhaPagamento_Data',
-    FILENAME = 'C:\Caminho\Para\O\Arquivo\FolhaPagamento.mdf',
-    SIZE = 10MB,
-    MAXSIZE = 100MB,
-    FILEGROWTH = 5MB
-)
-LOG ON (
-    NAME = 'FolhaPagamento_Log',
-    FILENAME = 'C:\Caminho\Para\O\Arquivo\FolhaPagamento_log.ldf',
-    SIZE = 5MB,
-    MAXSIZE = 25MB,
-    FILEGROWTH = 1MB
-);
+
+CREATE DATABASE FolhaPag
+
+--Arquivo de Usuario :
+
+
+
 
 
 --Cadastro de Empresas
-
 /*
 Explicação dos Campos:
 ID: Identificador único da tabela, gerado automaticamente com auto-incremento (BIGINT).
@@ -54,118 +45,110 @@ Todos os campos originalmente definidos como NUMERIC foram substituídos por FLO
 A chave primária foi mantida no campo ID, garantindo que cada registro tenha um identificador único.
 
 */
---Cadastro de Empresas
 
-USE [FolhaPag];
+--USE PESSOAL;
 GO
-
--- Define que as comparações com valores NULL seguem a sintaxe ANSI
-SET ANSI_NULLS ON;
-GO
-
--- Permite o uso de identificadores delimitados por aspas duplas ou colchetes
-SET QUOTED_IDENTIFIER ON;
-GO
-
--- Criação da tabela FPEMP
-CREATE TABLE [dbo].[FPEMP](
-    [ID] [bigint] IDENTITY(1,1),                 -- Identificador único com auto-incremento (BIGINT)
-    [ID_FPEMP] [bigint],                         -- Identificador da empresa pai para vínculo entre empresa matriz e filial
-    [ce_NFILIAL] [smallint],                     -- Código da filial (número pequeno para identificação de filiais)
- 	[ce_CNPJEMP] [varchar](18) ,               -- CNPJ da empresa com formato de 18 caracteres para armazenar máscara
-    [ce_INSEST] [varchar](16) ,               -- Inscrição estadual da empresa (até 16 caracteres)
-    [CE_RAZSOC] [varchar](40) ,                -- Razão social da empresa (até 40 caracteres)
-    [ce_TIPO] [smallint],                        -- Tipo de empresa, identificado por número pequeno
-	[ce_CLASSE] [varchar](3) ,                   -- Classe da empresa (representada por 3 caracteres)
-    [ce_CNAE] [varchar](max),                    -- Código CNAE, classificação de atividades econômicas, com tamanho variável
-    [ce_SAT] [float],                            -- Alíquota SAT (Seguro Acidente de Trabalho)
-    [ce_FPAS] [float],                           -- Código FPAS (Fundo de Previdência e Assistência Social)
-	[ce_CATEMP] [varchar](1) ,                  -- Categoria da empresa, representada por 1 caractere   
-	[ce_BANCO] [varchar](8) ,                     -- Código do banco (até 8 caracteres)      
-	[ce_TEL] [varchar](12) ,                      -- Telefone da empresa (até 12 caracteres)          
-	[ce_CONTATO] [varchar](30) ,                -- Nome do contato principal da empresa (até 30 caracteres)  
-	[ce_INSS] [varchar](30) ,                   -- Número do INSS da empresa (até 30 caracteres)   
-    [ce_INDINSS] [bit],                         -- - Indicador de inscrição no INSS (1: Sim, 0: Não)
-    [ce_DTRECINSS] [datetime],                   -- Data de recebimento do INSS
-    [ce_SIMPLES] [bit],                          -- Indicador de participação no Simples Nacional (1: Sim, 0: Não)
-    [ce_CTERCEIRO] [float],                      -- Contribuição de terceiros (float)
-    [ce_endemp] [varchar](30) ,   -- Endereço da empresa (até 30 caracteres) 
-	[ce_BAIEMP] [varchar](20) ,  -- Bairro da empresa (até 20 caracteres)
-	[ce_CIDEMP] [varchar](20) ,   -- Cidade da empresa (até 20 caracteres) 
-	[ce_CEPEMP] [varchar](8) ,   -- CEP da empresa (até 8 caracteres) 
-	[ce_ESTEMP] [varchar](2) ,   -- Estado da empresa, representado por sigla de 2 caracteres
-	[ce_ATVPRI] [varchar](4) ,   -- Código da atividade principal da empresa (até 4 caracteres)
-	[ce_ATVSEC] [varchar](4) ,   -- Código da atividade secundario  da empresa (até 4 caracteres)
-	[ce_QTDPRO] [float],                         -- Quantidade de profissionais na empresa
-    [ce_QTDFAM] [float],                         -- Quantidade de funcionários familiares
-    [ce_BAMPIS] [varchar](3) ,  -- Banco PIS da empresa (até 3 caracteres)   
-	[ce_AGEPIS] [varchar](4) ,  -- Agência bancária do PIS da empresa (até 4 caracteres)  
-	[ce_DIGPIS] [varchar](1) ,   -- Dígito verificador do PIS (1 caractere)  
-	[ce_VALARR] [float],                         -- Valor do arrendamento
-    [ce_PERQZN] [float],                         -- Percentual da quinzena
-    [ce_DTATU] [datetime],                       -- Data de atualização dos dados
-    [ce_DTINIPER] [datetime],                    -- Data de início do período
-    [ce_MENSAG] [varchar](50) ,   -- mensagem livre
-	[ce_SALMES] [varchar](3) ,   -- Código do salário mensal (até 3 caracteres)
-	[ce_SALFAM] [varchar](3) ,   -- Código do salário familiar (até 3 caracteres)
-	[ce_VBRISCO] [varchar](3) ,   -- Código do valor de risco (até 3 caracteres) vigilantes 
-	[ce_IAPAS] [varchar](3) ,     -- Código do Instituto de Assistência Previdenciária (até 3 caracteres) 
-	[ce_CREEXEC] [varchar](3) ,   -- Código do crédito do exercício (até 3 caracteres)   
-	[ce_DBBEXEC] [varchar](3) ,   -- Código do débito do exercício (até 3 caracteres)  
-	[ce_IRFONTE] [varchar](3) ,   -- Código de retenção do imposto de renda (até 3 caracteres)
-	[ce_CREARR] [varchar](3) ,   -- Código de crédito do arrendamento (até 3 caracteres)
-	[ce_DEBARR] [varchar](3) ,    -- Código de débito do arrendamento (até 3 caracteres)
-	[ce_13SAL] [varchar](3) ,      -- Código do décimo terceiro salário (até 3 caracteres) 
-	[ce_ADI13S] [varchar](3) ,      -- Código de adiantamento do décimo terceiro salário (até 3 caracteres)   
-	[ce_DESC13S] [varchar](3) ,    -- Código de desconto do décimo terceiro salário (até 3 caracteres)  
-	[ce_IAPA13] [varchar](3) ,       -- Código do IAPAS para o décimo terceiro salário (até 3 caracteres)
-	[ce_DIF13C] [varchar](3) ,      -- Código de diferença do décimo terceiro crédito (até 3 caracteres) 
-	[ce_DIF13D] [varchar](3) ,     -- Código de diferença do décimo terceiro débito (até 3 caracteres)  
-	[ce_FERIAS] [varchar](3) ,      -- Código de férias (até 3 caracteres) 
-	[ce_DIFSAL] [varchar](3) ,    -- Código de diferença salarial (até 3 caracteres)
-    [ce_VLSALFAM] [float],                       -- Valor do salário familiar
-    [ce_VLSALFAM1] [float],                      -- Valor adicional do salário familiar
-    [ce_SALMIN] [float],                         -- Salário mínimo da empresa
-    [ce_TETIAP] [float],                         -- Teto de alíquota da empresa
-    [ce_ABADEP] [float],                         -- Abatimento por dependente
-    [ce_RECMIN] [float],                         -- Receita mínima
-    [ce_LIMDED] [float],                         -- Limite de dedução
-    [ce_VALISE] [float],                         -- Valor de isenção
-    [ce_PROLAB] [float],                         -- Valor do pró-labore
-    [ce_VALHORA] [float],                        -- Valor da hora trabalhada
-    [CE_EMAIL] [varchar](max),                   -- E-mail da empresa
-    -- Coluna calculada para identificação composta
-    [IDIDEMP] AS (concat(
-        CONVERT([varchar](max), CASE WHEN ISNULL([ID_FPEMP], 0)<>(0) THEN [ID_FPEMP] ELSE [ID] END), 
-        '.', 
-        CASE WHEN ISNULL([ID_FPEMP], 0)<>(0) THEN [ID] END)
-    ),
+CREATE TABLE FPEMP (
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde
+    --ce_NUMEMP  FLOAT,                           -- Número da empresa (FLOAT)
+    ce_NFILIAL SMALLINT,                           -- Número da filial (FLOAT)
+    --ce_SIGEMP  VARCHAR(2),                      -- Sigla da empresa (2 caracteres)
     
-    -- Definição da chave primária da tabela
-    PRIMARY KEY CLUSTERED ([ID] ASC)
-    WITH (
-        PAD_INDEX = OFF, 
-        STATISTICS_NORECOMPUTE = OFF, 
-        IGNORE_DUP_KEY = OFF, 
-        ALLOW_ROW_LOCKS = ON, 
-        ALLOW_PAGE_LOCKS = ON, 
-        OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF
-    ) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+    -- Identificadores fiscais
+    ce_CNPJEMP       VARCHAR(18),                 -- CNPJ da empresa (18 dígitos)
+    ce_INSEST        VARCHAR(16),                 -- Inscrição estadual da empresa (16 caracteres)
+    CE_RAZSOC  VARCHAR(14),                     -- Razão social da empresa (até 14 caracteres)
+    CE_SENEMP  VARCHAR(30),                     -- Senha da empresa (até 30 caracteres)
+    CE_SEQDTA  DATE,                        -- Data de sequência de alguma operação
+    CE_SEQNSA  FLOAT,                           -- Sequência de notas fiscais (FLOAT)
+    ce_PATH    VARCHAR(30),                     -- Caminho de armazenamento (até 30 caracteres)
+    ce_TMP     VARCHAR(30),                     -- Caminho temporário de armazenamento (até 30 caracteres)
+    ce_ANO     VARCHAR(2),                      -- Ano de referência (até 2 caracteres)
+    ce_TIPO    FLOAT,                           -- Tipo da empresa (FLOAT)
+    ce_CLASSE  FLOAT,                           -- Classe da empresa (FLOAT)
+    ce_CNAE    FLOAT,                           -- Código CNAE da empresa (FLOAT)
+    ce_SAT     FLOAT,                           -- Alíquota do SAT (FLOAT)
+    ce_FPAS    FLOAT,                           -- Código FPAS da empresa (FLOAT)
+    ce_CATEMP  VARCHAR(1),                      -- Categoria da empresa (1 caractere)
+    ce_BANCO   VARCHAR(8),                      -- Código do banco (até 8 caracteres)
+    ce_TEL     VARCHAR(12),                     -- Telefone da empresa (até 12 caracteres)
+    ce_FAX     VARCHAR(12),                     -- Número de fax (até 12 caracteres)
+    ce_TELEX   VARCHAR(12),                     -- Número de telex (até 12 caracteres)
+    ce_CONTATO VARCHAR(30),                     -- Nome do contato principal (até 30 caracteres)
+    ce_INSS    VARCHAR(30),                     -- Número do INSS (até 30 caracteres)
+    ce_INDINSS FLOAT,                           -- Indicador do INSS (FLOAT)
+    ce_DTRECINSS DATETIME,                      -- Data de recebimento do INSS
+    ce_SIMPLES  FLOAT,                          -- Indicador de participação no Simples Nacional (FLOAT)
+    ce_CTERCEIRO FLOAT
+
+    -- Informações de endereço
+    ce_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
+    ce_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
+    ce_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
+    ce_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
+    ce_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
+    
+    -- Atividades econômicas
+    ce_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
+    ce_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
+    
+    -- Quantidade de empregados e dependentes
+    ce_QTDPRO        FLOAT,                            -- Quantidade de profissionais
+    ce_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
+    
+    -- Informações financeiras e fiscais
+    ce_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
+    ce_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
+    ce_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
+    ce_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
+    
+    -- Valores diversos (IRRF, FGTS, etc.)
+    ce_VALARR        FLOAT,                            -- Valor arrecadado
+    ce_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
+    ce_DTATU         DATETIME,                         -- Data da última atualização
+    ce_DTINIPER      DATETIME,                         -- Data de início do período de apuração
+    
+    -- Informações adicionais
+    ce_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
+    ce_SALMES        VARCHAR(3),                       -- Salário do mês (código)
+    ce_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
+    ce_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
+    
+    -- Informações fiscais adicionais
+    ce_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
+    ce_CREEXEC       VARCHAR(3),                       -- Crédito executivo
+    ce_DBBEXEC       VARCHAR(3),                       -- Débito executivo
+    ce_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
+    ce_CREARR        VARCHAR(3),                       -- Crédito arrecadado
+    ce_DEBARR        VARCHAR(3),                       -- Débito arrecadado
+    
+    -- 13º Salário
+    ce_13SAL         VARCHAR(3),                       -- 13º salário
+    ce_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
+    ce_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
+    ce_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
+    ce_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
+    ce_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
+    
+    -- Outras informações de férias, salários e valores acumulados
+    ce_FERIAS        VARCHAR(3),                       -- Código referente a férias
+    ce_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
+    ce_VLSALFAM      FLOAT,                            -- Valor do salário-família
+    ce_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
+    
+    -- Outros valores e limites
+    ce_SALMIN        FLOAT,                            -- Salário mínimo
+    ce_TETIAP        FLOAT,                            -- Teto INSS
+    ce_ABADEP        FLOAT,                            -- Abatimento por dependente
+    ce_RECMIN        FLOAT,                            -- Recolhimento mínimo
+    ce_LIMDED        FLOAT,                            -- Limite de dedução
+    ce_VALISE        FLOAT,                            -- Valor de isenção
+    ce_PROLAB        FLOAT,                            -- Pro-labore
+    ce_VALHORA       FLOAT,   
+
+);
 GO
-
--- Criação de chave estrangeira, vinculando a coluna [ID_FPEMP] à própria tabela
-ALTER TABLE [dbo].[FPEMP]
-    WITH CHECK ADD FOREIGN KEY ([ID_FPEMP]) REFERENCES [dbo].[FPEMP]([ID]);
-GO
-
-
---Explicações dos Componentes
---TabelaFPEMP : Armazena informações previstas sobre cada empresa, incluindo dados cadastrais, dados fiscais e de atividade econômica.
---Chave Primária : A coluna [ID]é usada como chave primária com incremento automático.
---__Chave EstrangeiraID_FPEMP : Perm[ID]da própri
-
-
 
 
 -- Cadastro de funcionarios 
@@ -180,12 +163,12 @@ todas essas tabelas faz parte de cadastros funcionarioa e dados do e-social, Res
 
 */
 
-USE PESSOAL;
+
 GO
 
 CREATE TABLE FPCD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,           -- Identificador único com auto-incremento (BIGINT)
-   
+    ID_FPEMP BIGINT REFERENCES FPEMP(ID), 
     CD_NUMMAT        VARCHAR(6),                   -- Número da matrícula do funcionário (chave primária)
     CD_NOMFUN        VARCHAR(40),                  -- Nome completo do funcionário
     CD_NUMLOT        VARCHAR(8),                   -- Número do lote do funcionário
@@ -300,46 +283,10 @@ CREATE TABLE FPCD (
     CD_NOMECONJ      VARCHAR(40),                  -- Nome do cônjuge do funcionário
     CD_CIDNASC       VARCHAR(20),                  -- Cidade de nascimento
     CD_ESTCONJ       VARCHAR(2),                   -- Estado do cônjuge
-    CD_DTNACONJ      DATETIME,                     -- Data de nascimento do cônjuge
-   [ID_FPEMP] [BIGINT] REFERENCES FPEMP(ID),        -- Número da empresa (ligação com FPEMP)
-    CD_NUMEMP        FLOAT,
-    CD_NFILIAL       FLOAT,	   
-
-);
-GO
-
-    CONSTRAINT ID_fpcd BIGINT REFERENCES PK_FPEMP_ID(ID),
-    CONSTRAINT PK_FPCD PRIMARY KEY CLUSTERED (CD_NUMMAT),
-    CONSTRAINT UNQ_FPCD_CPF UNIQUE NONCLUSTERED (CD_NUMCPF),
-    CONSTRAINT CHK_FPCD_SEXO CHECK (CD_SEXO IN('M','F')),
-    CONSTRAINT CHK_FPCD_CD_SALMES CHECK (CD_SALMES > 0)
+    CD_DTNACONJ      DATETIME
     
 );
 GO
-
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPCF FOREIGN KEY (CD_NUMMAT) REFERENCES FPCF(CF_NUMMAT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPLT FOREIGN KEY (CD_NUMLOT) REFERENCES FPLT(LT_NUMLOT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPRL FOREIGN KEY (CD_NUMMAT) REFERENCES FPRL(RL_NUMMAT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPRLS FOREIGN KEY (CD_NUMMAT) REFERENCES FPRLS(ID_RLSMAT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPRLD FOREIGN KEY (CD_NUMMAT) REFERENCES FPRLD(ID_RLDMAT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPBA FOREIGN KEY (CD_BCOCTA) REFERENCES FPBA(BA_CODBCO);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPDF FOREIGN KEY (CD_NUMMAT) REFERENCES FPDF(DF_NUMMAT);
-ALTER TABLE FPCD ADD CONSTRAINT FK_FPCD_FPRES FOREIGN KEY (CD_NUMMAT) REFERENCES FPRES(VA_NUMMAT);
-GO
-
--- Vinculando FPCD com FPEMP considerando ID da empresa (CD_NUMEMP) e filial (CD_NFILIAL)
-ALTER TABLE FPCD 
-ADD CONSTRAINT FK_FPCD_FPEMP 
-FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) 
-REFERENCES FPEMP(ID, ce_NFILIAL);
-
--- Vinculando FPCD com FPCF considerando matrícula (CD_NUMMAT) e ID da empresa (CD_NUMEMP)
-ALTER TABLE FPCD 
-ADD CONSTRAINT FK_FPCD_FPCF 
-FOREIGN KEY (CD_NUMMAT, CD_NUMEMP) REFERENCES FPCF(CF_NUMMAT, CF_NUMEMP);
-
-
-
 
 ----------------------------------------------------------------------------------------------------
 -- Complemento dos cadastros para geracao de e-social;
@@ -388,9 +335,11 @@ Complemento de Endereço: Este campo adicional permite armazenar informações m
 ### 2. Tabela **FPCD_SST** (Dados de SST relacionados ao eSocial)
 */
 
-/----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 CREATE TABLE FPCD_SST (
-    ID_SST BIGINT IDENTITY(1,1) PRIMARY KEY,   -- Identificador único com auto-incremento (BIGINT) para cada registro de SST
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,   -- Identificador único com auto-incremento (BIGINT) para cada registro de SST
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
+	ID_FPCD BIGINT REFERENCES FPCD(ID),     -- * Funcionario
     CD_NUMMAT VARCHAR(6) NOT NULL,             -- Número da matrícula do trabalhador (ligação com FPCD)
     CD_MONITORAMENTO_SAUDE VARCHAR(1),         -- Indicador se o trabalhador está sob monitoramento de saúde ocupacional (Sim/Não)
     CD_CONDICOES_AMBIENTAIS VARCHAR(1),        -- Indica se há exposição a condições ambientais de risco (Sim/Não)
@@ -407,10 +356,7 @@ CREATE TABLE FPCD_SST (
     CD_GRAU_RISCO VARCHAR(1),                  -- Grau do risco (B: Baixo, M: Médio, A: Alto)
     CD_INICIO_EXPOSICAO DATETIME,              -- Data de início da exposição ao risco ocupacional
     CD_TEMPO_EXPOSICAO VARCHAR(20)             -- Tempo de exposição do trabalhador ao risco (em dias, meses ou anos)
-);
-
--- Criando vínculo entre FPCD_SST e FPCD através da matrícula
-ALTER TABLE FPCD_SST ADD CONSTRAINT FK_FPCD_SST_FPCD FOREIGN KEY (CD_NUMMAT) REFERENCES FPCD(CD_NUMMAT);
+)
 GO
 
 --Campos Adicionados à Tabela FPCD (Cadastro de Funcionários)
@@ -499,8 +445,8 @@ DIRF (Substituída pelo eSocial e EFD-Reinf a partir de 2024)
 
 
 CREATE TABLE Gce_GENERACAO (
-    ID_Gce BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da Gce
-    CD_EMPRESA VARCHAR(14) NOT NULL,              -- CNPJ ou CEI da empresa
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da Gce
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     CD_COMPETENCIA VARCHAR(7) NOT NULL,           -- Competência (mês/ano) no formato MM/YYYY
     CD_NUMEMPREGADO VARCHAR(11),                  -- CPF do empregado (caso haja individualização)
     CD_NOME_EMPREGADO VARCHAR(40),                -- Nome do empregado
@@ -514,7 +460,7 @@ CREATE TABLE Gce_GENERACAO (
     CD_CODIGO_PAGAMENTO VARCHAR(4),               -- Código de pagamento da Gce (ex: 2100, 2003)
     CD_TIPO_EMPRESA VARCHAR(1),                   -- Tipo da empresa (Simples Nacional, Lucro Presumido, etc.)
     CD_COD_SEFIP VARCHAR(2),                      -- Código da SEFIP para classificação (ex: 115, 150)
-    CD_SITUACAO Gce VARCHAR(1) DEFAULT 'A',       -- Situação do pagamento (A: Aberto, P: Pago)
+    CD_SITUACAO  VARCHAR(1) DEFAULT 'A',       -- Situação do pagamento (A: Aberto, P: Pago)
     CD_BANCO_PAGAMENTO VARCHAR(3),                -- Código do banco onde o pagamento será efetuado
     CD_AGENCIA_PAGAMENTO VARCHAR(4),              -- Código da agência onde o pagamento será efetuado
     CD_CONTA_PAGAMENTO VARCHAR(10),               -- Número da conta para pagamento
@@ -530,8 +476,8 @@ Para atender ao FGTS (Fundo de Garantia por Tempo de Serviço), as empresas util
 ENVIADA PELA CONECTIVIDADE SOCIAL 
 */
 CREATE TABLE GRF_ENVIO (
-    ID_GRF BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da GRF gerada
-    CD_EMPRESA VARCHAR(14) NOT NULL,              -- CNPJ ou CEI da empresa
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da GRF gerada
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     CD_COMPETENCIA VARCHAR(7) NOT NULL,           -- Competência (mês/ano) no formato MM/YYYY
     CD_NUMEMPREGADO VARCHAR(11) NOT NULL,         -- CPF do empregado
     CD_NOME_EMPREGADO VARCHAR(40) NOT NULL,       -- Nome completo do empregado
@@ -557,34 +503,34 @@ GO
 --IRRF: DARF (via folha de pagamento)
 
 CREATE TABLE irrf_darf_folha_pagamento (
-    id_registro INT PRIMARY KEY IDENTITY(1,1),      -- Chave primária com auto-incremento
-    cnpj_empresa VARCHAR(14) NOT NULL,               -- CNPJ da empresa (14 dígitos, sem separadores)
-    razao_social_empresa VARCHAR(255) NOT NULL,      -- Razão social da empresa
-    mes_competencia DATE NOT NULL,                   -- Mês de competência (ex.: 2024-10-01 para outubro de 2024)
-    codigo_receita VARCHAR(4) NOT NULL,              -- Código de Receita para DARF (por exemplo, 0561)
-    valor_irrf DECIMAL(15, 2) NOT NULL,              -- Valor do IRRF retido na fonte
-    data_pagamento DATE NOT NULL,                    -- Data de pagamento da folha de pagamento
-    nome_funcionario VARCHAR(255) NOT NULL,          -- Nome do funcionário
-    cpf_funcionario VARCHAR(11) NOT NULL,            -- CPF do funcionário (11 dígitos)
-    salario_bruto DECIMAL(15, 2) NOT NULL,           -- Salário bruto do funcionário
-    base_calculo_irrf DECIMAL(15, 2) NOT NULL,       -- Base de cálculo do IRRF após deduções
-    aliquota_irrf DECIMAL(5, 2) NOT NULL,            -- Alíquota de IRRF aplicada ao funcionário
+    id INT PRIMARY KEY IDENTITY(1,1),      -- Chave primária com auto-incremento
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
+    razao_social_empresa VARCHAR(255) NULL,      -- Razão social da empresa
+    mes_competencia DATE  NULL,                   -- Mês de competência (ex.: 2024-10-01 para outubro de 2024)
+    codigo_receita VARCHAR(4)  NULL,              -- Código de Receita para DARF (por exemplo, 0561)
+    valor_irrf DECIMAL(15, 2)  NULL,              -- Valor do IRRF retido na fonte
+    data_pagamento DATE  NULL,                    -- Data de pagamento da folha de pagamento
+    nome_funcionario VARCHAR(255)  NULL,          -- Nome do funcionário
+    cpf_funcionario VARCHAR(11)  NULL,            -- CPF do funcionário (11 dígitos)
+    salario_bruto DECIMAL(15, 2) NULL,           -- Salário bruto do funcionário
+    base_calculo_irrf DECIMAL(15, 2) NULL,       -- Base de cálculo do IRRF após deduções
+    aliquota_irrf DECIMAL(5, 2) NULL,            -- Alíquota de IRRF aplicada ao funcionário
     deducoes_irrf DECIMAL(15, 2) DEFAULT 0,          -- Deduções aplicáveis para IRRF (ex: dependentes)
-    valor_irrf_retido DECIMAL(15, 2) NOT NULL,       -- Valor efetivo do IRRF retido do funcionário
-    data_envio DATE NOT NULL,                        -- Data do envio do DARF
+    valor_irrf_retido DECIMAL(15, 2)  NULL,       -- Valor efetivo do IRRF retido do funcionário
+    data_envio DATE  NULL,                        -- Data do envio do DARF
     referencia_legal VARCHAR(255) DEFAULT 'Art. 70 da Lei 11.196/2005' -- Referência legal
 );
 -- Inserção de exemplo para um envio de DARF IRRF mensal
-INSERT INTO irrf_darf_folha_pagamento 
-(cnpj_empresa, razao_social_empresa, mes_competencia, codigo_receita, valor_irrf, data_pagamento, 
-nome_funcionario, cpf_funcionario, salario_bruto, base_calculo_irrf, aliquota_irrf, deducoes_irrf, valor_irrf_retido, data_envio)
-VALUES ('12345678000195', 'Empresa Exemplo LTDA', '2024-10-01', '0561', 1500.00, '2024-10-10', 
-'João Silva', '12345678901', 5000.00, 4500.00, 27.5, 189.59, 1262.85, '2024-10-20');
+--INSERT INTO irrf_darf_folha_pagamento 
+--(cnpj_empresa, razao_social_empresa, mes_competencia, codigo_receita, valor_irrf, data_pagamento, 
+--nome_funcionario, cpf_funcionario, salario_bruto, base_calculo_irrf, aliquota_irrf, deducoes_irrf, valor_irrf_retido, data_envio)
+--VALUES ('12345678000195', 'Empresa Exemplo LTDA', '2024-10-01', '0561', 1500.00, '2024-10-10', 
+--'João Silva', '12345678901', 5000.00, 4500.00, 27.5, 189.59, 1262.85, '2024-10-20');
 
 ---------------------------------------------------------------------------------------------------------------
 --rubrica do eSocial
 CREATE TABLE rubricas_esocial (
-    id_rubrica INT PRIMARY KEY IDENTITY(1,1),         -- Identificador único da rubrica (auto-incremento)
+    id INT PRIMARY KEY IDENTITY(1,1),         -- Identificador único da rubrica (auto-incremento)
     
     cod_rubrica VARCHAR(30) NOT NULL,                  -- Código da rubrica (definido pela empresa), no máximo 30 caracteres
     descricao_rubrica VARCHAR(255) NOT NULL,           -- Descrição da rubrica (nome da verba), até 255 caracteres
@@ -619,11 +565,11 @@ CREATE TABLE rubricas_esocial (
 -- 9. "criacao" e "ultima_atualizacao" são gerados automaticamente pelo sistema para controle interno.
 
 -- Exemplo de inserção de dados:
-INSERT INTO rubricas_esocial 
-(cod_rubrica, descricao_rubrica, nat_rubrica, tipo_rubrica, inc_base_irrf, inc_base_inss, inc_base_fgts, inc_base_sindicato, data_inicio_validade)
-VALUES ('001', 'Salário Base', '100', 'Provento', 'Sim', 'Sim', 'Sim', 'Nao', '2024-01-01'),
-('002', 'Desconto INSS', '921', 'Desconto', 'Nao', 'Sim', 'Nao', 'Nao', '2024-01-01'),
-('003', 'Adiantamento Salarial', '180', 'Provento', 'Sim', 'Sim', 'Sim', 'Nao', '2024-01-01');
+--INSERT INTO rubricas_esocial 
+--(cod_rubrica, descricao_rubrica, nat_rubrica, tipo_rubrica, inc_base_irrf, inc_base_inss, inc_base_fgts, inc_base_sindicato, data_inicio_validade)
+--VALUES ('001', 'Salário Base', '100', 'Provento', 'Sim', 'Sim', 'Sim', 'Nao', '2024-01-01'),
+--('002', 'Desconto INSS', '921', 'Desconto', 'Nao', 'Sim', 'Nao', 'Nao', '2024-01-01'),
+--('003', 'Adiantamento Salarial', '180', 'Provento', 'Sim', 'Sim', 'Sim', 'Nao', '2024-01-01');
 
 -------------------------------------------------------------------------------------------------------
 --Tabela de grupo conforme -
@@ -632,7 +578,7 @@ VALUES ('001', 'Salário Base', '100', 'Provento', 'Sim', 'Sim', 'Sim', 'Nao', '
  -- nº 44, de 11/08/2023 – DOU de -17/08/2023) em sql comentada,
 
 CREATE TABLE resumo_registro_esocial (
-    id_registro INT PRIMARY KEY IDENTITY(1,1),         -- Identificador único do registro (auto-incremento)
+    id INT PRIMARY KEY IDENTITY(1,1),         -- Identificador único do registro (auto-incremento)
     grupo VARCHAR(100) NOT NULL,                        -- Nome do grupo do layout eSocial
     grupo_pai VARCHAR(100),                             -- Nome do grupo pai (grupo superior hierárquico)
     nivel INT NOT NULL,                                 -- Nível hierárquico do grupo no layout
@@ -658,18 +604,18 @@ GO
 
 -- Exemplo de inserção de registros com base no layout do eSocial versão S-1.2:
 
-INSERT INTO resumo_registro_esocial 
-(grupo, grupo_pai, nivel, descricao, ocorrencia, chave, condicao)
-VALUES ('S-1010', NULL, 1, 'Informações das Rubricas', '1-1', 'Sim', 'Obrigatório o preenchimento para todas as rubricas usadas na folha de pagamento'),
-('Identificação do Trabalhador', 'S-1010', 2, 'CPF do trabalhador', '1-1', 'Sim', 'Obrigatório quando se tratar de trabalhador cadastrado'),
-('Bases de Cálculo', 'S-1010', 2, 'Base de cálculo de IRRF', '0-1', 'Não', 'Preencher apenas quando houver retenção de IRRF na folha de pagamento');
+--INSERT INTO resumo_registro_esocial 
+--(grupo, grupo_pai, nivel, descricao, ocorrencia, chave, condicao)
+--VALUES ('S-1010', NULL, 1, 'Informações das Rubricas', '1-1', 'Sim', 'Obrigatório o preenchimento para todas as rubricas usadas na folha de pagamento'),
+--('Identificação do Trabalhador', 'S-1010', 2, 'CPF do trabalhador', '1-1', 'Sim', 'Obrigatório quando se tratar de trabalhador cadastrado'),
+--('Bases de Cálculo', 'S-1010', 2, 'Base de cálculo de IRRF', '0-1', 'Não', 'Preencher apenas quando houver retenção de IRRF na folha de pagamento');
 
--- Outro exemplo:
-INSERT INTO resumo_registro_esocial 
-(grupo, grupo_pai, nivel, descricao, ocorrencia, chave, condicao)
-VALUES ('S-1200', NULL, 1, 'Remuneração do trabalhador', '1-1', 'Sim', 'Preenchimento obrigatório para todo trabalhador com vínculo ativo no mês de apuração'),
-('Detalhamento da Remuneração', 'S-1200', 2, 'Valor do salário', '1-1', 'Não', 'Informar o valor do salário acordado para o trabalhador'),
-('Descontos', 'S-1200', 2, 'Desconto de INSS', '0-1', 'Não', 'Preencher se houver desconto de INSS na remuneração do trabalhador');
+---- Outro exemplo:
+--INSERT INTO resumo_registro_esocial 
+--(grupo, grupo_pai, nivel, descricao, ocorrencia, chave, condicao)
+--VALUES ('S-1200', NULL, 1, 'Remuneração do trabalhador', '1-1', 'Sim', 'Preenchimento obrigatório para todo trabalhador com vínculo ativo no mês de apuração'),
+--('Detalhamento da Remuneração', 'S-1200', 2, 'Valor do salário', '1-1', 'Não', 'Informar o valor do salário acordado para o trabalhador'),
+--('Descontos', 'S-1200', 2, 'Desconto de INSS', '0-1', 'Não', 'Preencher se houver desconto de INSS na remuneração do trabalhador');
 
 ------------------------------------------------------------------------------------------------------------------
 /*CRIE TABELAS •	EFD-Reinf: Arquivo eletrônico (via sistema contábil)
@@ -683,15 +629,14 @@ VALUES ('S-1200', NULL, 1, 'Remuneração do trabalhador', '1-1', 'Sim', 'Preenc
 */
 
 CREATE TABLE efd_reinf (
-    id_registro INT PRIMARY KEY IDENTITY(1,1),          -- Identificador único do registro (auto-incremento)
-    cnpj_empresa VARCHAR(14) NOT NULL,                  -- CNPJ da empresa responsável pela entrega da EFD-Reinf
+    id INT PRIMARY KEY IDENTITY(1,1),          -- Identificador único do registro (auto-incremento)
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     periodo_apuracao DATE NOT NULL,                     -- Período de apuração (mês/ano)
     tipo_evento VARCHAR(10) NOT NULL,                   -- Tipo de evento (R-1000, R-2010, etc.)
     valor_retencao FLOAT NOT NULL,                      -- Valor da retenção de impostos/contribuições
     natureza_retencao VARCHAR(10) NOT NULL,             -- Natureza da retenção (com base na tabela de natureza de retenção)
     data_envio DATE NOT NULL,                           -- Data de envio da EFD-Reinf
     status_envio VARCHAR(50) NOT NULL,                  -- Status do envio (ex: Enviado, Pendente, Processado)
-    
     criacao DATETIME DEFAULT CURRENT_TIMESTAMP,         -- Data de criação do registro
     ultima_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP -- Data de última atualização do registro
 );
@@ -706,14 +651,14 @@ GO
 -- 6. "data_envio" e "status_envio" monitoram quando o arquivo foi enviado e o status do processamento.
 
 -- Exemplo de inserção:
-INSERT INTO efd_reinf 
-(cnpj_empresa, periodo_apuracao, tipo_evento, valor_retencao, natureza_retencao, data_envio, status_envio)
-VALUES ('12345678000195', '2024-10-01', 'R-2010', 15000.00, '804', '2024-10-20', 'Enviado');
+--INSERT INTO efd_reinf 
+--(cnpj_empresa, periodo_apuracao, tipo_evento, valor_retencao, natureza_retencao, data_envio, status_envio)
+--VALUES ('12345678000195', '2024-10-01', 'R-2010', 15000.00, '804', '2024-10-20', 'Enviado');
 --------------------------------------------------------------------------------------------------
 --TABELA DCTF_WEB
 CREATE TABLE dctf_web (
     id_declaracao INT PRIMARY KEY IDENTITY(1,1),        -- Identificador único da declaração (auto-incremento)
-    cnpj_empresa VARCHAR(14) NOT NULL,                  -- CNPJ da empresa
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     periodo_apuracao DATE NOT NULL,                     -- Período de apuração (mês/ano)
     valor_contribuicoes FLOAT NOT NULL,                 -- Valor total das contribuições a serem pagas
     valor_creditos FLOAT NOT NULL,                       -- Valor dos créditos que podem ser abatidos
@@ -735,30 +680,30 @@ GO
 -- 6. "data_envio" e "status_envio" monitoram o envio e o estado da declaração.
 
 -- Exemplo de inserção:
-INSERT INTO dctf_web 
-(cnpj_empresa, periodo_apuracao, valor_contribuicoes, valor_creditos, valor_total_devido, data_envio, status_envio)
-VALUES ('12345678000195', '2024-09-01', 100000.00, 5000.00, 95000.00, '2024-09-30', 'Enviado');
+--INSERT INTO dctf_web 
+--(cnpj_empresa, periodo_apuracao, valor_contribuicoes, valor_creditos, valor_total_devido, data_envio, status_envio)
+--VALUES ('12345678000195', '2024-09-01', 100000.00, 5000.00, 95000.00, '2024-09-30', 'Enviado');
 
 -------------------------------------------------------------------------------------------------------------------
 --TABELA GRF ENVIADA PELA CONECTIVIDADE SOCIAL E ESTA SENDO INTEGRADA PELO E-SOCIAL 
- CREATE TABLE irrf_darf_folha_pagamento (
-    id_registro INT PRIMARY KEY IDENTITY(1,1),      -- Chave primária com auto-incremento
-    cnpj_empresa VARCHAR(14) NOT NULL,               -- CNPJ da empresa (14 dígitos, sem separadores)
-    razao_social_empresa VARCHAR(255) NOT NULL,      -- Razão social da empresa
-    mes_competencia DATE NOT NULL,                   -- Mês de competência (ex.: 2024-10-01 para outubro de 2024)
-    codigo_receita VARCHAR(4) NOT NULL,              -- Código de Receita para DARF (por exemplo, 0561)
-    valor_irrf DECIMAL(15, 2) NOT NULL,              -- Valor do IRRF retido na fonte
-    data_pagamento DATE NOT NULL,                    -- Data de pagamento da folha de pagamento
-    nome_funcionario VARCHAR(255) NOT NULL,          -- Nome do funcionário
-    cpf_funcionario VARCHAR(11) NOT NULL,            -- CPF do funcionário (11 dígitos)
-    salario_bruto DECIMAL(15, 2) NOT NULL,           -- Salário bruto do funcionário
-    base_calculo_irrf DECIMAL(15, 2) NOT NULL,       -- Base de cálculo do IRRF após deduções
-    aliquota_irrf DECIMAL(5, 2) NOT NULL,            -- Alíquota de IRRF aplicada ao funcionário
-    deducoes_irrf DECIMAL(15, 2) DEFAULT 0,          -- Deduções aplicáveis para IRRF (ex: dependentes)
-    valor_irrf_retido DECIMAL(15, 2) NOT NULL,       -- Valor efetivo do IRRF retido do funcionário
-    data_envio DATE NOT NULL,                        -- Data do envio do DARF
-    referencia_legal VARCHAR(255) DEFAULT 'Art. 70 da Lei 11.196/2005' -- Referência legal
-);
+-- CREATE TABLE irrf_darf_folha_pagamento (
+--    id INT PRIMARY KEY IDENTITY(1,1),      -- Chave primária com auto-incremento
+--   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
+--    razao_social_empresa VARCHAR(255) NOT NULL,      -- Razão social da empresa
+--    mes_competencia DATE NOT NULL,                   -- Mês de competência (ex.: 2024-10-01 para outubro de 2024)
+--    codigo_receita VARCHAR(4) NOT NULL,              -- Código de Receita para DARF (por exemplo, 0561)
+--    valor_irrf DECIMAL(15, 2) NOT NULL,              -- Valor do IRRF retido na fonte
+--    data_pagamento DATE NOT NULL,                    -- Data de pagamento da folha de pagamento
+--    nome_funcionario VARCHAR(255) NOT NULL,          -- Nome do funcionário
+--    cpf_funcionario VARCHAR(11) NOT NULL,            -- CPF do funcionário (11 dígitos)
+--    salario_bruto DECIMAL(15, 2) NOT NULL,           -- Salário bruto do funcionário
+--    base_calculo_irrf DECIMAL(15, 2) NOT NULL,       -- Base de cálculo do IRRF após deduções
+--    aliquota_irrf DECIMAL(5, 2) NOT NULL,            -- Alíquota de IRRF aplicada ao funcionário
+--    deducoes_irrf DECIMAL(15, 2) DEFAULT 0,          -- Deduções aplicáveis para IRRF (ex: dependentes)
+--    valor_irrf_retido DECIMAL(15, 2) NOT NULL,       -- Valor efetivo do IRRF retido do funcionário
+--    data_envio DATE NOT NULL,                        -- Data do envio do DARF
+--    referencia_legal VARCHAR(255) DEFAULT 'Art. 70 da Lei 11.196/2005' -- Referência legal
+--);
 
 -- Comentários:
 -- 1. "cnpj_empresa" identifica a empresa responsável pelo recolhimento.
@@ -773,14 +718,13 @@ VALUES ('12345678000195', '2024-09-01', 100000.00, 5000.00, 95000.00, '2024-09-3
 --TABELA GRF ENVIADA PELA CONECTIVIDADE SOCIAL E ESTA SENDO INTEGRADA PELO E-SOCIAL 
  CREATE TABLE grrf (
     id_grrf INT PRIMARY KEY IDENTITY(1,1),              -- Identificador único da GRRF (auto-incremento)
-    cnpj_empresa VARCHAR(14) NOT NULL,                   -- CNPJ da empresa responsável pelo recolhimento
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     matricula_funcionario INT NOT NULL,                  -- Matrícula do funcionário cujo FGTS está sendo recolhido
     data_rescisao DATE NOT NULL,                         -- Data da rescisão do contrato de trabalho
     valor_fgts FLOAT NOT NULL,                           -- Valor do FGTS a ser recolhido
     valor_multa_fgts FLOAT NOT NULL,                     -- Valor da multa rescisória do FGTS (geralmente 40%)
     data_envio DATE NOT NULL,                            -- Data de envio da GRRF
     status_envio VARCHAR(50) NOT NULL,                   -- Status do envio (Enviado, Pendente, Processado)
-    
     criacao DATETIME DEFAULT CURRENT_TIMESTAMP,          -- Data de criação do registro
     ultima_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP -- Data de última atualização do registro
 );
@@ -795,9 +739,9 @@ GO
 -- 6. "data_envio" e "status_envio" monitoram o envio e o status da guia GRRF.
 
 -- Exemplo de inserção:
-INSERT INTO grrf 
-(cnpj_empresa, matricula_funcionario, data_rescisao, valor_fgts, valor_multa_fgts, data_envio, status_envio)
-VALUES ('12345678000195', 12345, '2024-09-01', 3000.00, 1200.00, '2024-09-05', 'Enviado');
+--INSERT INTO grrf 
+--(cnpj_empresa, matricula_funcionario, data_rescisao, valor_fgts, valor_multa_fgts, data_envio, status_envio)
+--VALUES ('12345678000195', 12345, '2024-09-01', 3000.00, 1200.00, '2024-09-05', 'Enviado');
 
 -------------------------------------------------------------------------------------------------------------------
 
@@ -809,99 +753,99 @@ VALUES ('12345678000195', 12345, '2024-09-01', 3000.00, 1200.00, '2024-09-05', '
 -- // Arquivo de Empresas-- 
 --Criação da tabela FPce (Dados da Empresa Filial):
 
-USE PESSOAL;
-GO
+--USE PESSOAL;
+--GO
 
-CREATE TABLE FPce (
-    ID BIGINT IDENTITY(1,1) PRIMARY KEY, -- Identificador único do registro (chave primária com auto-incremento)
+--CREATE TABLE FPce (
+--    ID BIGINT IDENTITY(1,1) PRIMARY KEY, -- Identificador único do registro (chave primária com auto-incremento)
     
-    -- Campos da empresa
-    ce_SIGEMP        VARCHAR(2),                       -- Sigla da empresa (2 caracteres)
-    ce_NUMEMP        FLOAT,                            -- Número da empresa
-    ce_NFILIAL       FLOAT,                            -- Número da filial
+--    -- Campos da empresa
+--    ce_SIGEMP        VARCHAR(2),                       -- Sigla da empresa (2 caracteres)
+--    ce_NUMEMP        FLOAT,                            -- Número da empresa
+--    ce_NFILIAL       FLOAT,                            -- Número da filial
     
-    -- Informações de endereço
-    ce_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
-    ce_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
-    ce_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
-    ce_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
-    ce_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
+--    -- Informações de endereço
+--    ce_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
+--    ce_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
+--    ce_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
+--    ce_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
+--    ce_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
     
-    -- Identificadores fiscais
-    ce_CNPJEMP       VARCHAR(14),                      -- CNPJ da empresa (14 dígitos)
-    ce_INSEST        VARCHAR(16),                      -- Inscrição estadual da empresa (16 caracteres)
+--    -- Identificadores fiscais
+--    ce_CNPJEMP       VARCHAR(14),                      -- CNPJ da empresa (14 dígitos)
+--    ce_INSEST        VARCHAR(16),                      -- Inscrição estadual da empresa (16 caracteres)
     
-    -- Atividades econômicas
-    ce_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
-    ce_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
+--    -- Atividades econômicas
+--    ce_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
+--    ce_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
     
-    -- Quantidade de empregados e dependentes
-    ce_QTDPRO        FLOAT,                            -- Quantidade de profissionais
-    ce_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
+--    -- Quantidade de empregados e dependentes
+--    ce_QTDPRO        FLOAT,                            -- Quantidade de profissionais
+--    ce_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
     
-    -- Informações financeiras e fiscais
-    ce_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
-    ce_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
-    ce_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
-    ce_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
+--    -- Informações financeiras e fiscais
+--    ce_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
+--    ce_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
+--    ce_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
+--    ce_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
     
-    -- Valores diversos (IRRF, FGTS, etc.)
-    ce_VALARR        FLOAT,                            -- Valor arrecadado
-    ce_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
-    ce_DTATU         DATETIME,                         -- Data da última atualização
-    ce_DTINIPER      DATETIME,                         -- Data de início do período de apuração
+--    -- Valores diversos (IRRF, FGTS, etc.)
+--    ce_VALARR        FLOAT,                            -- Valor arrecadado
+--    ce_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
+--    ce_DTATU         DATETIME,                         -- Data da última atualização
+--    ce_DTINIPER      DATETIME,                         -- Data de início do período de apuração
     
-    -- Informações adicionais
-    ce_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
-    ce_SALMES        VARCHAR(3),                       -- Salário do mês (código)
-    ce_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
-    ce_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
+--    -- Informações adicionais
+--    ce_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
+--    ce_SALMES        VARCHAR(3),                       -- Salário do mês (código)
+--    ce_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
+--    ce_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
     
-    -- Informações fiscais adicionais
-    ce_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
-    ce_CREEXEC       VARCHAR(3),                       -- Crédito executivo
-    ce_DBBEXEC       VARCHAR(3),                       -- Débito executivo
-    ce_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
-    ce_CREARR        VARCHAR(3),                       -- Crédito arrecadado
-    ce_DEBARR        VARCHAR(3),                       -- Débito arrecadado
+--    -- Informações fiscais adicionais
+--    ce_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
+--    ce_CREEXEC       VARCHAR(3),                       -- Crédito executivo
+--    ce_DBBEXEC       VARCHAR(3),                       -- Débito executivo
+--    ce_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
+--    ce_CREARR        VARCHAR(3),                       -- Crédito arrecadado
+--    ce_DEBARR        VARCHAR(3),                       -- Débito arrecadado
     
-    -- 13º Salário
-    ce_13SAL         VARCHAR(3),                       -- 13º salário
-    ce_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
-    ce_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
-    ce_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
-    ce_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
-    ce_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
+--    -- 13º Salário
+--    ce_13SAL         VARCHAR(3),                       -- 13º salário
+--    ce_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
+--    ce_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
+--    ce_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
+--    ce_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
+--    ce_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
     
-    -- Outras informações de férias, salários e valores acumulados
-    ce_FERIAS        VARCHAR(3),                       -- Código referente a férias
-    ce_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
-    ce_VLSALFAM      FLOAT,                            -- Valor do salário-família
-    ce_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
+--    -- Outras informações de férias, salários e valores acumulados
+--    ce_FERIAS        VARCHAR(3),                       -- Código referente a férias
+--    ce_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
+--    ce_VLSALFAM      FLOAT,                            -- Valor do salário-família
+--    ce_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
     
-    -- Outros valores e limites
-    ce_SALMIN        FLOAT,                            -- Salário mínimo
-    ce_TETIAP        FLOAT,                            -- Teto INSS
-    ce_ABADEP        FLOAT,                            -- Abatimento por dependente
-    ce_RECMIN        FLOAT,                            -- Recolhimento mínimo
-    ce_LIMDED        FLOAT,                            -- Limite de dedução
-    ce_VALISE        FLOAT,                            -- Valor de isenção
-    ce_PROLAB        FLOAT,                            -- Pro-labore
-    ce_VALHORA       FLOAT,                            -- Valor da hora trabalhada
+--    -- Outros valores e limites
+--    ce_SALMIN        FLOAT,                            -- Salário mínimo
+--    ce_TETIAP        FLOAT,                            -- Teto INSS
+--    ce_ABADEP        FLOAT,                            -- Abatimento por dependente
+--    ce_RECMIN        FLOAT,                            -- Recolhimento mínimo
+--    ce_LIMDED        FLOAT,                            -- Limite de dedução
+--    ce_VALISE        FLOAT,                            -- Valor de isenção
+--    ce_PROLAB        FLOAT,                            -- Pro-labore
+--    ce_VALHORA       FLOAT,                            -- Valor da hora trabalhada
 
-    -- Chave estrangeira para vincular FPce à tabela FPEMP
-    CONSTRAINT FK_FPce_FPEMP FOREIGN KEY (ce_NUMEMP) REFERENCES FPEMP(ce_NUMEMP),
+--    -- Chave estrangeira para vincular FPce à tabela FPEMP
+--    CONSTRAINT FK_FPce_FPEMP FOREIGN KEY (ce_NUMEMP) REFERENCES FPEMP(ce_NUMEMP),
     
-    -- Definição de chaves e índices
-    CONSTRAINT PK_FPce PRIMARY KEY CLUSTERED (ce_NUMEMP), -- Chave primária com índice clusterizado
-    CONSTRAINT UNQ_FPce_CNPJ UNIQUE NONCLUSTERED (ce_CNPJEMP) -- CNPJ deve ser único
-);
-GO
---Vinculando a tabela FPCD com FPce (Empresa e Filial):
--- Vinculando FPCD com FPce considerando empresa (CD_NUMEMP) e filial (CD_NFILIAL)
-ALTER TABLE FPCD 
-ADD CONSTRAINT FK_FPCD_FPce FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) REFERENCES FPce(ce_NUMEMP, ce_NFILIAL);
-GO
+--    -- Definição de chaves e índices
+--    CONSTRAINT PK_FPce PRIMARY KEY CLUSTERED (ce_NUMEMP), -- Chave primária com índice clusterizado
+--    CONSTRAINT UNQ_FPce_CNPJ UNIQUE NONCLUSTERED (ce_CNPJEMP) -- CNPJ deve ser único
+--);
+--GO
+----Vinculando a tabela FPCD com FPce (Empresa e Filial):
+---- Vinculando FPCD com FPce considerando empresa (CD_NUMEMP) e filial (CD_NFILIAL)
+--ALTER TABLE FPCD 
+--ADD CONSTRAINT FK_FPCD_FPce FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) REFERENCES FPce(ce_NUMEMP, ce_NFILIAL);
+--GO
 -------------------------------------------------------------------------------------------------------
 
 --Criação da tabela FPRL (Valores Acumulados Quinzena):
@@ -923,12 +867,13 @@ Essas tabelas modelam uma estrutura de informações fiscais e financeiras que p
 
 */
 
-USE PESSOAL;
+--USE PESSOAL;
 GO
 -- Tabela FPRL (Valores Acumulados Quinzena)
 CREATE TABLE FPRL (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,               -- Identificador único (auto-incremento)
-    
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RL_NUMMAT  VARCHAR(6),                             -- Número da matrícula do trabalhador
     RL_NUMLOT  VARCHAR(8),                             -- Número do lote de pagamento
     RL_TOTPRO  FLOAT,                                  -- Total de proventos
@@ -947,24 +892,14 @@ CREATE TABLE FPRL (
     RL_RENBRT  FLOAT,                                  -- Rendimento bruto
     RL_RENTBR  FLOAT,                                  -- Rendimento tributável
     RL_BASIAP  FLOAT,                                  -- Base de cálculo para INSS
-    RL_BASFGTS FLOAT,                                  -- Base de cálculo para FGTS
-    
-    -- Informações da empresa e filial
-    RL_NUMEMP  FLOAT,                                  -- Número da empresa
-    RL_NFILIAL FLOAT,                                  -- Número da filial
-    
-    -- Chaves estrangeiras para vinculação
-    CONSTRAINT FK_FPRL_FPEMP FOREIGN KEY (RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    
-    CONSTRAINT FK_FPRL_FPCD FOREIGN KEY (RL_NUMMAT, RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL));
+    RL_BASFGTS FLOAT)
 GO
 
 -- Tabela FPRL (Valores Acumulados Quinzena)
 CREATE TABLE FPRL (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    RL_NUMMAT  VARCHAR(6), 
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RL_NUMLOT  VARCHAR(8),
     RL_TOTPRO  FLOAT,
     RL_TOTDES  FLOAT,
@@ -978,21 +913,15 @@ CREATE TABLE FPRL (
     RL_RENBRT  FLOAT,
     RL_RENTBR  FLOAT,
     RL_BASIAP  FLOAT,
-    RL_BASFGTS FLOAT,
-    RL_NUMEMP  FLOAT,
-    RL_NFILIAL FLOAT,
-    
-    CONSTRAINT FK_FPRL_FPEMP FOREIGN KEY (RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    CONSTRAINT FK_FPRL_FPCD FOREIGN KEY (RL_NUMMAT, RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    RL_BASFGTS FLOAT
 );
 GO
 
 -- Tabela FPRLD (Valores Acumulados 2)
 CREATE TABLE FPRLD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    ID_RLDMAT VARCHAR(6),
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RL_NUMLOT VARCHAR(8),
     RL_TOTPRO FLOAT,
     RL_TOTDES FLOAT,
@@ -1006,21 +935,15 @@ CREATE TABLE FPRLD (
     RL_RENBRT FLOAT,
     RL_RENTBR FLOAT,
     RL_BASIAP FLOAT,
-    RL_BASFGTS FLOAT,
-    RL_NUMEMP FLOAT,
-    RL_NFILIAL FLOAT,
-    
-    CONSTRAINT FK_FPRLD_FPEMP FOREIGN KEY (RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    CONSTRAINT FK_FPRLD_FPCD FOREIGN KEY (ID_RLDMAT, RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    RL_BASFGTS FLOAT
 );
 GO
 
 -- Tabela FPRLS (Valores Acumulados Diário/Semanal)
 CREATE TABLE FPRLS (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    RL_NUMMAT VARCHAR(6),
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RL_NUMLOT VARCHAR(8),
     RL_TOTPRO FLOAT,
     RL_TOTDES FLOAT,
@@ -1034,20 +957,14 @@ CREATE TABLE FPRLS (
     RL_RENBRT FLOAT,
     RL_RENTBR FLOAT,
     RL_BASIAP FLOAT,
-    RL_BASFGTS FLOAT,
-    RL_NUMEMP FLOAT,
-    RL_NFILIAL FLOAT,
-
-    CONSTRAINT FK_FPRLS_FPEMP FOREIGN KEY (RL_NUMEMP, RL_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    CONSTRAINT FK_FPRLS_FPCD FOREIGN KEY (RL_NUMMAT, RL_NUMEMP, RL_NFILIAL)  
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    RL_BASFGTS FLOAT
 );
 GO
 
 -- Tabela FPBA (Dados do Banco da Empresa)
 CREATE TABLE FPBA (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
     BA_CODBCO VARCHAR(3),
     BA_CODAGE VARCHAR(4),
     BA_DIGITO VARCHAR(1),
@@ -1055,78 +972,56 @@ CREATE TABLE FPBA (
     BA_NOMAGE VARCHAR(20),
     BA_CIDAGE VARCHAR(20),
     BA_ESTAGE VARCHAR(2),
-    BA_CEPAGE VARCHAR(8),
-    BA_NUMEMP FLOAT,
-    BA_NFILIAL FLOAT,
-
-    CONSTRAINT FK_FPBA_FPEMP FOREIGN KEY (BA_NUMEMP, BA_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    CONSTRAINT FK_FPBA_FPCD FOREIGN KEY (BA_NUMEMP, BA_NFILIAL)   REFERENCES FPCD (CD_NUMEMP, CD_NFILIAL)
+    BA_CEPAGE VARCHAR(8)
 );
 GO
 
 -- Tabela FPFU (Arquivo de Funções)
 CREATE TABLE FPFU (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     FU_CODFUN VARCHAR(7),
     FU_NOMFUN VARCHAR(20),
     FU_NUMEMP FLOAT,
-    FU_NFILIAL FLOAT,
-
-    CONSTRAINT FK_FPFU_FPEMP FOREIGN KEY (FU_NUMEMP, FU_NFILIAL) 
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-    CONSTRAINT FK_FPFU_FPCD FOREIGN KEY (FU_NUMEMP, FU_NFILIAL)   REFERENCES FPCD (CD_NUMEMP, CD_NFILIAL)
+    FU_NFILIAL FLOAT
 );
 GO
 
 -- Vinculando a tabela FPCD com a tabela FPEMP pela empresa e filial
-ALTER TABLE FPCD 
-ADD CONSTRAINT FK_FPCD_FPEMP 
-FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) REFERENCES FPEMP (ID, CE_NFILIAL);
-GO
 
-USE PESSOAL;
-GO
 
 -- Tabela VERBAS_FER (Verbas de Férias) com vínculo à FPEMP
 CREATE TABLE VERBAS_FER (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    MFF_NUMMAT   VARCHAR(6),
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MFF_ANOMES   VARCHAR(4),
     MFF_CODVER   VARCHAR(3),
     MFF_QTDHOR   FLOAT,
-    MFF_VALVER   FLOAT,
-    MFF_NUMEMP   FLOAT,
-    MFF_NFILIAL  FLOAT,
-
-    CONSTRAINT FK_VERBAS_FER_FPCD FOREIGN KEY (MFF_NUMMAT, MFF_NUMEMP, MFF_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL),
-    
-    CONSTRAINT FK_VERBAS_FER_FPEMP FOREIGN KEY (MFF_NUMEMP, MFF_NFILIAL)   REFERENCES FPEMP (ID, ce_NFILIAL)
+    MFF_VALVER   FLOAT
 );
 GO
 
 -- Tabela VERBAS_RES (Verbas de Rescisão) com vínculo à FPEMP
 CREATE TABLE VERBAS_RES (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    MR_NUMMAT   VARCHAR(6),
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MR_ANOMES   VARCHAR(4),
     MR_CODVER   VARCHAR(3),
     MR_QTDHOR   FLOAT,
     MR_VALVER   FLOAT,
     MR_NUMEMP   FLOAT,
-    MR_NFILIAL  FLOAT,
-
-    CONSTRAINT FK_VERBAS_RES_FPCD FOREIGN KEY (MR_NUMMAT, MR_NUMEMP, MR_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL),
-    
-    CONSTRAINT FK_VERBAS_RES_FPEMP FOREIGN KEY (MR_NUMEMP, MR_NFILIAL)  REFERENCES FPEMP (ID, ce_NFILIAL)
+    MR_NFILIAL  FLOAT
 );
 GO
 
 -- Tabela FPVB (Verbas Incidências) com vínculo à FPEMP
 CREATE TABLE FPVB (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     VB_CODVER    VARCHAR(3),
     VB_NOMVER    VARCHAR(20),
     VB_NOMABV    VARCHAR(12),
@@ -1141,67 +1036,37 @@ CREATE TABLE FPVB (
     VB_RESCIS    VARCHAR(1),
     VB_RAIS      VARCHAR(1),
     VB_EXPINF    VARCHAR(70),
-    VB_EXPPOS    VARCHAR(70),
-    VB_NUMEMP    FLOAT,
-    VB_NFILIAL   FLOAT,
-
-    CONSTRAINT FK_FPVB_FPEMP FOREIGN KEY (VB_NUMEMP, VB_NFILIAL)  REFERENCES FPEMP (ID, ce_NFILIAL)
+    VB_EXPPOS    VARCHAR(70)
 );
 GO
 
-USE PESSOAL;
-GO
--- // Arquivo de 13er. Salario
--- Tabela FP13 (13º Salário) com vínculos à FPEMP e FPCD
-
-USE PESSOAL;
-GO
 
 -- Tabela FP13 (13º Salário) com FLOAT e DATETIME, criando chave primária por empresa e filial, 
 -- e vinculando à FPEMP (pela empresa e filial) e FPCD (pela matrícula)
 CREATE TABLE FP13 (
-    M13_NUMEMP   FLOAT,
-    M13_NFILIAL  FLOAT,
-    M13_NUMMAT   VARCHAR(6), 
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     M13_NUMLOT   VARCHAR(8), 
     M13_CODVER   VARCHAR(3), 
     M13_QTDHOR   FLOAT,
     M13_PROPOR   FLOAT,
     M13_VAL13S   FLOAT,
     M13_VALADI   FLOAT,
-    M13_IAP13S   FLOAT,
-
-    CONSTRAINT PK_FP13 PRIMARY KEY (M13_NUMEMP, M13_NFILIAL, M13_NUMMAT),
-
-    CONSTRAINT FK_FP13_FPEMP FOREIGN KEY (M13_NUMEMP, M13_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-
-    CONSTRAINT FK_FP13_FPCD FOREIGN KEY (M13_NUMMAT, M13_NUMEMP, M13_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    M13_IAP13S   FLOAT
 );
 GO
 
-USE PESSOAL;
-GO
-
- --// Arquivo de Movimento
  --- Tabela FPMVB (Movimento) com ID como chave primária e vínculos à FPEMP e FPCD
 CREATE TABLE FPMVB (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    MV_NUMEMP   FLOAT,
-    MV_NFILIAL  FLOAT,
-    MV_NUMMAT   VARCHAR(6),
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MV_TIPMOV   VARCHAR(1),
     MV_CODVER   VARCHAR(3),
     MV_NUMLOT   VARCHAR(8),
     MV_CODRET   FLOAT,
-    MV_VALMOV   FLOAT,
-
-    CONSTRAINT FK_FPMVB_FPEMP FOREIGN KEY (MV_NUMEMP, MV_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-
-    CONSTRAINT FK_FPMVB_FPCD FOREIGN KEY (MV_NUMMAT, MV_NUMEMP, MV_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    MV_VALMOV   FLOAT
 );
 GO
 
@@ -1210,20 +1075,13 @@ GO
 -- Tabela FPMV (Movimento) com ID como chave primária e vínculos à FPEMP e FPCD
 CREATE TABLE FPMV (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    MV_NUMEMP   FLOAT,
-    MV_NFILIAL  FLOAT,
-    MV_NUMMAT   VARCHAR(6),
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MV_TIPMOV   VARCHAR(1),
     MV_CODVER   VARCHAR(3),
     MV_NUMLOT   VARCHAR(8),
     MV_CODRET   FLOAT,
-    MV_VALMOV   FLOAT,
-
-    CONSTRAINT FK_FPMV_FPEMP FOREIGN KEY (MV_NUMEMP, MV_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-
-    CONSTRAINT FK_FPMV_FPCD FOREIGN KEY (MV_NUMMAT, MV_NUMEMP, MV_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    MV_VALMOV   FLOAT
 );
 GO
 
@@ -1231,9 +1089,8 @@ GO
 -- Tabela FPVA (Valores Acumulados) com ID como chave primária e vínculos à FPEMP e FPCD
 CREATE TABLE FPVA (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    VA_NUMEMP   FLOAT,
-    VA_NFILIAL  FLOAT,
-    VA_NUMMAT   VARCHAR(6),
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     VA_NUMLOT   VARCHAR(8),
     VA_DIA      VARCHAR(2),
     VA_ANOMES   VARCHAR(4),
@@ -1243,18 +1100,10 @@ CREATE TABLE FPVA (
     VA_RES      VARCHAR(1),
     VA_INSIDE   VARCHAR(1),
     VA_VERBA    VARCHAR(1),
-    VA_FATOR    VARCHAR(5),
-
-    CONSTRAINT FK_FPVA_FPEMP FOREIGN KEY (VA_NUMEMP, VA_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-
-    CONSTRAINT FK_FPVA_FPCD FOREIGN KEY (VA_NUMMAT, VA_NUMEMP, VA_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    VA_FATOR    VARCHAR(5)
 );
 GO
 
-USE PESSOAL;
-GO
 
 
  ---// Arquivo 
@@ -1262,15 +1111,12 @@ GO
 -- Tabela FPRF com ID como chave primária, vinculando à FPEMP (pela empresa e filial) e à FPCD (pela matrícula)
 CREATE TABLE FPRF (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    RF_NUMEMP   FLOAT,
-    RF_NFILIAL  FLOAT,
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RF_NUMLOT   VARCHAR(8),
     RF_CODVER   VARCHAR(3),
     RF_VALVER   FLOAT,
-    RF_QTDHOR   FLOAT,
-
-    CONSTRAINT FK_FPRF_FPEMP FOREIGN KEY (RF_NUMEMP, RF_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL)
+    RF_QTDHOR   FLOAT
 );
 GO
 
@@ -1279,18 +1125,11 @@ GO
 -- Tabela FPVR com ID como chave primária, vinculando à FPEMP (pela empresa e filial) e à FPCD (pela matrícula)
 CREATE TABLE FPVR (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
-    VR_NUMEMP   FLOAT,
-    VR_NFILIAL  FLOAT,
-    VR_NUMMAT   VARCHAR(6),
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     VR_CODVER   VARCHAR(3),
     VR_QTDHOR   FLOAT,
-    VR_VALVER   FLOAT,
-
-    CONSTRAINT FK_FPVR_FPEMP FOREIGN KEY (VR_NUMEMP, VR_NFILIAL)
-    REFERENCES FPEMP (ID, ce_NFILIAL),
-
-    CONSTRAINT FK_FPVR_FPCD FOREIGN KEY (VR_NUMMAT, VR_NUMEMP, VR_NFILIAL)
-    REFERENCES FPCD (CD_NUMMAT, CD_NUMEMP, CD_NFILIAL)
+    VR_VALVER   FLOAT
 );
 GO
 
@@ -1309,20 +1148,16 @@ Considerações:
 FLOAT foi utilizado no lugar de NUMERIC, permitindo maior flexibilidade para armazenar números decimais e inteiros com precisão.
 A chave primária foi mantida no campo M3_NUMMAT, que representa a matrícula do funcionário e é uma identificação única no contexto desta tabela.
 */
-use PESSOAL
+
 
 CREATE TABLE FPM3 (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,           -- Identificador único, chave primária, com auto-incremento (BIGINT)
-    
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     M3_NUMMAT VARCHAR(6),                          -- Número da matrícula do funcionário (6 caracteres)
     M3_CODVER VARCHAR(3),                          -- Código da verba (3 caracteres)
     M3_VALVER FLOAT,                               -- Valor da verba (FLOAT para valores com casas decimais)
-    M3_CODRET FLOAT,                               -- Código de retorno (FLOAT para números de 2 dígitos)
-    M3_NUMEMP FLOAT,                               -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    M3_NFILIAL FLOAT,                              -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPM3 PRIMARY KEY CLUSTERED (M3_NUMMAT)  -- Chave primária definida no campo M3_NUMMAT (número da matrícula)
+    M3_CODRET FLOAT
 );
 GO
 
@@ -1343,16 +1178,11 @@ A chave primária da tabela é o campo MA_NUMMAT (número da matrícula), e est�
 */
 CREATE TABLE FPMA (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,          -- Identificador único, chave primária, com auto-incremento (BIGINT)
-    
-    MA_NUMMAT  VARCHAR(6),                        -- Número da matrícula do funcionário (6 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MA_CODVER  VARCHAR(3),                        -- Código da verba (3 caracteres)
     MA_NUMLOT  VARCHAR(8),                        -- Número do lote de pagamento (8 caracteres)
-    MA_VALADI  FLOAT,                             -- Valor do adiantamento, definido como FLOAT para suportar valores decimais
-    MA_NUMEMP  FLOAT,                             -- Número da empresa, substituindo NUMERIC(2,0) por FLOAT
-    MA_NFILIAL FLOAT,                             -- Número da filial, substituindo NUMERIC(4,0) por FLOAT
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMA PRIMARY KEY CLUSTERED (MA_NUMMAT)  -- Chave primária definida no campo MA_NUMMAT (número da matrícula)
+    MA_VALADI  FLOAT
 );
 GO
 
@@ -1374,19 +1204,13 @@ O uso de FLOAT foi escolhido por sua flexibilidade ao armazenar tanto números i
 A chave primária PK_FPMADD foi mantida no campo MA_NUMMAT, que identifica de forma única cada funcionário.
 */
   ---IF !FILE("&W_FPMadd") 
-  use PESSOAL
+  
   
 CREATE TABLE FPMADD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MA_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (6 caracteres)
-    MA_NUMLOT   VARCHAR(8),                      -- Número do lote de pagamento (8 caracteres)
-    MA_VALADI   FLOAT,                           -- Valor do adiantamento, utilizando FLOAT para permitir valores decimais
-    MA_NUMEMP   FLOAT,                           -- Número da empresa, utilizando FLOAT para suportar números inteiros
-    MA_NFILIAL  FLOAT,               -- Número da filial, utilizando FLOAT para armazenar números de até 4 dígitos
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMADD PRIMARY KEY CLUSTERED (MA_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    MA_VALADI   FLOAT
 );
 GO
 
@@ -1404,20 +1228,12 @@ FLOAT foi escolhido para substituir NUMERIC em todos os campos numéricos, ofere
 A chave primária PK_FPMAD está definida no campo MA_NUMMAT, que é o identificador único de cada funcionário.
 */
 
-use PESSOAL
 
 CREATE TABLE FPMAD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MA_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (6 caracteres)
-    MA_NUMLOT   VARCHAR(8),                      -- Número do lote de pagamento (8 caracteres)
-    MA_VALADID  FLOAT,                           -- Valor adicional (FLOAT para valores decimais)
-    MA_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MA_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMAD PRIMARY KEY CLUSTERED (MA_NUMMAT) 
-     -- Chave primária baseada no número da matrícula do funcionário
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    MA_VALADID  FLOAT
 );
 GO
 
@@ -1437,22 +1253,15 @@ FLOAT foi escolhido para todos os campos originalmente numéricos (NUMERIC), poi
 A chave primária PK_FPMP está definida no campo MP_NUMMAT, que identifica de forma única cada funcionário.
 */
 
-use PESSOAL
 
 CREATE TABLE FPMP (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MP_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MP_CODVER   VARCHAR(3),                      -- Código da verba (até 3 caracteres)
     MP_CODRET   FLOAT,                           -- Código de retorno, agora definido como FLOAT (anteriormente NUMERIC(2,0))
     MP_QTDHOR   FLOAT,                           -- Quantidade de horas (FLOAT, substituindo NUMERIC(7,2))
-    MP_VALMOV   FLOAT,                           -- Valor do movimento, agora definido como FLOAT (substituindo NUMERIC(13,2))
-    MP_NUMEMP   FLOAT,                           -- Número da empresa, substituindo NUMERIC(2,0) por FLOAT
-    MP_NFILIAL  FLOAT,                           -- Número da filial, substituindo NUMERIC(4,0) por FLOAT
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMP PRIMARY KEY CLUSTERED (MP_NUMMAT) 
-     -- Chave primária baseada no número da matrícula do funcionário
+    MP_VALMOV   FLOAT
 );
 GO
 
@@ -1471,14 +1280,10 @@ A chave primária da tabela é o campo MQ_NUMMAT, que identifica de forma única
 */
 CREATE TABLE FPMQ (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MQ_NUMMAT  VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
-    MQ_VALADI  FLOAT,                           -- Valor do adiantamento (FLOAT, substituindo NUMERIC(13,2))
-    MQ_NUMEMP  FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MQ_NFILIAL FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMQ PRIMARY KEY CLUSTERED (MQ_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+    MQ_VALADI  FLOAT
 );
 GO
 
@@ -1505,14 +1310,9 @@ Arquivo movimento diadio
 
 CREATE TABLE FPMD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MD_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
-    MD_VALADID  FLOAT,                           -- Valor adicional identificado (FLOAT, substituindo NUMERIC(13,2))
-    MD_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MD_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMD PRIMARY KEY CLUSTERED (MD_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    MD_VALADID  FLOAT
 );
 GO
 /*
@@ -1535,14 +1335,9 @@ Em todas as tabelas, a chave primária foi mantida no campo de matrícula do fun
 
 CREATE TABLE FPMS (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MS_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
-    MS_VALADID  FLOAT,                           -- Valor adicional identificado (FLOAT, substituindo NUMERIC(13,2))
-    MS_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MS_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMS PRIMARY KEY CLUSTERED (MS_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    MS_VALADID  FLOAT
 );
 GO
 
@@ -1568,15 +1363,10 @@ Em todas as tabelas, a chave primária foi mantida no campo de matrícula do fun
 
 CREATE TABLE FPMAS (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MA_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),
     MA_NUMLOT   VARCHAR(8),                      -- Número do lote de pagamento (até 8 caracteres)
-    MA_VALADID  FLOAT,                           -- Valor adicional identificado (FLOAT, substituindo NUMERIC(13,2))
-    MA_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MA_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMAS PRIMARY KEY CLUSTERED (MA_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+    MA_VALADID  FLOAT
 );
 GO
 
@@ -1597,15 +1387,12 @@ A chave primária está definida no campo V13_NUMMAT, que é o número único de
 */
 
 CREATE TABLE FPMV3 (
-    V13_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     V13_CODVER   VARCHAR(3),                      -- Código da verba (até 3 caracteres)
     V13_VALVER   FLOAT,                           -- Valor da verba (FLOAT, substituindo NUMERIC(13,2))
-    V13_CODRET   FLOAT,                           -- Código de retorno (FLOAT, substituindo NUMERIC(2,2))
-    V13_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    V13_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPV3 PRIMARY KEY CLUSTERED (V13_NUMMAT)  -- Chave primária baseada no número da matrícula do funcionário
+    V13_CODRET   FLOAT
 );
 GO
 
@@ -1631,32 +1418,17 @@ Vínculo com FPEMP:
 Vínculo com FPCD: O campo MO_NUMMAT está vinculado à tabela FPCD (campo CD_NUMMAT), garantindo que a matrícula do funcionário seja consistente entre as tabelas.
 
 */
-use PESSOAL
 
 CREATE TABLE FPMO (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MO_NUMMAT   VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
-    MO_SIGEMP   VARCHAR(2),                      -- Sigla da empresa (até 2 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MO_CODPEC   VARCHAR(3),                      -- Código da peça (até 3 caracteres)
     MO_PAGMOV   VARCHAR(1),                      -- Indicador de pagamento do movimento (1 caractere)
     MO_PRODUC   FLOAT,                           -- Produção realizada (FLOAT, substituindo NUMERIC(4,0))
     MO_HORMIN   FLOAT,                           -- Horas mínimas de trabalho (FLOAT, substituindo NUMERIC(4,0))
     MO_DATMOV   DATE,                            -- Data do movimento
-    MO_SEQMOV   VARCHAR(3),                      -- Sequência do movimento (até 3 caracteres)
-    MO_NUMEMP   FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MO_NFILIAL  FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-    
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPMO_FPEMP FOREIGN KEY (MO_NUMEMP, MO_NFILIAL)
-    REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPMO_FPCD FOREIGN KEY (MO_NUMMAT)
-    REFERENCES FPCD(CD_NUMMAT),
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMO PRIMARY KEY CLUSTERED (MO_NUMMAT)
+    MO_SEQMOV   VARCHAR(3)
 );
 GO
 
@@ -1679,30 +1451,18 @@ Vínculo com FPEMP: O campo FD_NUMEMP e FD_NFILIAL são vinculados à tabela FPE
 Vínculo com FPCD: O campo FD_NUMEMP está vinculado ao campo CD_NUMEMP da tabela FPCD, garantindo que a empresa vinculada ao funcionário esteja correta.
 
 */
-use PESSOAL
+
 
 CREATE TABLE FPFD (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,        -- Identificador único com auto-incremento (BIGINT)
-    
-    FD_IDFPFD  INT IDENTITY(1,1),               -- Identificador específico da tabela FPFD com auto-incremento
+  	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    FD_IDFPFD  INT,               -- Identificador específico da tabela FPFD com auto-incremento
     FD_TIPVAL  VARCHAR(1),                      -- Tipo de valor (1 caractere)
     FD_NUMFAI  VARCHAR(2),                      -- Número de faixas (2 caracteres)
     FD_VALFAI  FLOAT,                           -- Valor da faixa (FLOAT, substituindo NUMERIC(13,2))
     FD_ALIQUO  FLOAT,                           -- Alíquota aplicada (FLOAT, substituindo NUMERIC(6,2))
-    FD_VALDES  FLOAT,                           -- Valor de desconto (FLOAT, substituindo NUMERIC(12,2))
-    FD_NUMEMP  FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    FD_NFILIAL FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPFD_FPEMP FOREIGN KEY (FD_NUMEMP, FD_NFILIAL)
-    REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPFD_FPCD FOREIGN KEY (FD_NUMEMP)
-    REFERENCES FPCD(CD_NUMEMP),
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPFD PRIMARY KEY CLUSTERED(FD_IDFPFD)
+    FD_VALDES  FLOAT
 );
 GO
 
@@ -1724,24 +1484,12 @@ Vínculo com FPCD: O campo TB_NUMEMP está vinculado à tabela FPCD (campo CD_NU
 */
 CREATE TABLE FPTB (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,        -- Identificador único com auto-incremento (BIGINT)
-    
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     TB_CODPEC   FLOAT,                          -- Código da peça (FLOAT, substituindo NUMERIC(3,0))
     TB_PREUNI   FLOAT,                          -- Preço unitário da peça (FLOAT, substituindo NUMERIC(13,2))
     TB_DESPEC   VARCHAR(30),                    -- Descrição da peça (até 30 caracteres)
-    TB_PRODIA   FLOAT,                          -- Produção diária (FLOAT, substituindo NUMERIC(6,2))
-    TB_NUMEMP   FLOAT,                          -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    TB_NFILIAL  FLOAT,                          -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPTB_FPEMP FOREIGN KEY (TB_NUMEMP, TB_NFILIAL)
-    REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPTB_FPCD FOREIGN KEY (TB_NUMEMP)
-    REFERENCES FPCD(CD_NUMEMP),
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPTB PRIMARY KEY CLUSTERED(ID)
+    TB_PRODIA   FLOAT
 );
 GO
 
@@ -1770,26 +1518,15 @@ As chaves primárias e estrangeiras são configuradas para garantir a integridad
 */
 CREATE TABLE FPVE (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,             -- Identificador único com auto-incremento (BIGINT)
-    IDFPVE INT IDENTITY(1,1) NOT NULL,               -- Identificador específico da tabela FPVE com auto-incremento
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
+    IDFPVE INT,               -- Identificador específico da tabela FPVE com auto-incremento
     MAT VARCHAR(6) NOT NULL,                          -- Número da matrícula do funcionário (até 6 caracteres)
     VER VARCHAR(3) NOT NULL,                          -- Código da verba (até 3 caracteres)
     DIA VARCHAR(2) NOT NULL,                          -- Dia do evento (até 2 caracteres)
     VAL FLOAT NOT NULL,                               -- Valor da verba
     SIG FLOAT NOT NULL,                               -- Sinal do valor, usado para indicar positivo ou negativo
-    DOC VARCHAR(10) NOT NULL,                         -- Documento associado (até 10 caracteres)
-    NUMEMP INT NOT NULL,                              -- Número da empresa (definido como INT)
-    NFILIAL INT NOT NULL                              -- Número da filial (definido como INT)
-);
-GO
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPVE_FPEMP FOREIGN KEY (NUMEMP, NFILIAL)    REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPVE_FPCD FOREIGN KEY (MAT)     REFERENCES FPCD(CD_NUMMAT),
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPVE PRIMARY KEY CLUSTERED(IDFPVE)
+    DOC VARCHAR(10) NOT NULL
 );
 GO
 
@@ -1847,8 +1584,8 @@ Uma restrição de unicidade foi adicionada ao campo DF_NUMCIC para garantir que
 */
 CREATE TABLE FPDF (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    DF_NUMMAT VARCHAR(6),                        -- Número da matrícula do funcionário (até 6 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     DF_CODRET VARCHAR(4),                        -- Código de retenção (até 4 caracteres)
     DF_ESPBEN VARCHAR(1),                        -- Espécie do benefício (1 caractere)
     DF_NUMCIC VARCHAR(14),                       -- Número do CPF ou CNPJ do beneficiário (14 caracteres)
@@ -1906,22 +1643,7 @@ CREATE TABLE FPDF (
     -- Campos referentes ao 13º salário
     DF_VAL13S FLOAT,                             -- Valor do 13º salário
     DF_DED13S FLOAT,                             -- Deduções do 13º salário
-    DF_IRF13S FLOAT,                             -- IRRF do 13º salário
-
-    DF_NUMEMP FLOAT,                             -- Número da empresa
-    DF_NFILIAL FLOAT,                            -- Número da filial
-
-    -- Definição da chave primária
-    CONSTRAINT PK_FPDF PRIMARY KEY CLUSTERED (DF_NUMMAT),
-
-    -- Definição de chave única para o CPF/CNPJ do beneficiário
-    CONSTRAINT UNQ_FPDF_CPF UNIQUE NONCLUSTERED (DF_NUMCIC),
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPDF_FPEMP FOREIGN KEY (DF_NUMEMP, DF_NFILIAL)  REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPDF_FPCD FOREIGN KEY (DF_NUMMAT)     REFERENCES FPCD(CD_NUMMAT)
+    DF_IRF13S FLOAT
 );
 GO
 
@@ -1973,8 +1695,8 @@ A chave primária foi definida no campo RA_NUMMAT, garantindo que cada funcioná
 */
 CREATE TABLE FPRA (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    RA_NUMMAT  VARCHAR(6),                       -- Número da matrícula do funcionário (até 6 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RA_NUMPIS  VARCHAR(11),                      -- Número do PIS do funcionário (11 caracteres)
     RA_NOMFUN  VARCHAR(30),                      -- Nome completo do funcionário (até 30 caracteres)
     RA_NUMCP   VARCHAR(6),                       -- Número da carteira de trabalho (até 6 caracteres)
@@ -2013,19 +1735,7 @@ CREATE TABLE FPRA (
     RA_REMSET  VARCHAR(9),                       -- Remuneração de Setembro (9 caracteres)
     RA_REMOUT  VARCHAR(9),                       -- Remuneração de Outubro (9 caracteres)
     RA_REMNOV  VARCHAR(9),                       -- Remuneração de Novembro (9 caracteres)
-    RA_REMDEZ  VARCHAR(9),                       -- Remuneração de Dezembro (9 caracteres)
-
-    RA_NUMEMP  FLOAT,                            -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    RA_NFILIAL FLOAT,                            -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária
-    CONSTRAINT PK_FPRA PRIMARY KEY CLUSTERED (RA_NUMMAT),
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPRA_FPEMP FOREIGN KEY (RA_NUMEMP, RA_NFILIAL)     REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPRA_FPCD FOREIGN KEY (RA_NUMMAT)     REFERENCES FPCD(CD_NUMMAT)
+    RA_REMDEZ  VARCHAR(9)
 );
 GO
 
@@ -2058,8 +1768,8 @@ A chave primária foi definida no campo MR_NUMMAT, que identifica de forma únic
 
 CREATE TABLE FPMR (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
-    MR_NUMMAT VARCHAR(6),                        -- Número da matrícula do funcionário (até 6 caracteres)
+	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     MR_NUMLOT VARCHAR(8),                        -- Número do lote de pagamento (até 8 caracteres)
     MR_DIA    VARCHAR(2),                        -- Dia do evento (até 2 caracteres)
     MR_ANOMES VARCHAR(4),                        -- Ano e mês do evento (até 4 caracteres, ex: '202312' para dezembro de 2023)
@@ -2069,18 +1779,7 @@ CREATE TABLE FPMR (
     MR_VALVER FLOAT,                             -- Valor da verba (FLOAT, substituindo NUMERIC(13,2))
     MR_INSIDE VARCHAR(1),                        -- Indicador de verba interna ou externa (1 caractere)
     MR_VERBA  VARCHAR(1),                        -- Tipo de verba (1 caractere)
-    MR_RES    VARCHAR(1),                        -- Indicador de resultado (1 caractere)
-    MR_NUMEMP FLOAT,                             -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    MR_NFILIAL FLOAT,                            -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPMR PRIMARY KEY CLUSTERED (MR_NUMMAT),
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPMR_FPEMP FOREIGN KEY (MR_NUMEMP, MR_NFILIAL)  REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPMR_FPCD FOREIGN KEY (MR_NUMMAT)     REFERENCES FPCD(CD_NUMMAT)
+    MR_RES    VARCHAR(1)
 );
 GO
 /*
@@ -2107,22 +1806,12 @@ A chave primária foi mantida no campo ID, garantindo que cada registro tenha um
 
 CREATE TABLE FPRE (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
-    
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     RE_CODIGO  VARCHAR(1),                       -- Código referente ao registro (1 caractere)
     RE_FAIXA   FLOAT,                            -- Faixa de valor (FLOAT, substituindo NUMERIC(13,2))
     RE_ALIQUOT VARCHAR(3),                       -- Alíquota aplicada (até 3 caracteres)
-    RE_VALOR   FLOAT,                            -- Valor associado ao registro (FLOAT, substituindo NUMERIC(13,2))
-    RE_NUMEMP  FLOAT,                            -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    RE_NFILIAL FLOAT,                            -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPRE_FPEMP FOREIGN KEY (RE_NUMEMP, RE_NFILIAL)     REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPRE_FPCD FOREIGN KEY (RE_CODIGO)     REFERENCES FPCD(CD_NUMMAT),
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPRE PRIMARY KEY CLUSTERED (ID)
+    RE_VALOR   FLOAT
 );
 GO
 
@@ -2155,9 +1844,9 @@ A chave primária foi definida no campo VA_NUMMAT, garantindo que cada funcioná
 
 */
 CREATE TABLE FPRES (
-    VID BIGINT IDENTITY(1,1) PRIMARY KEY,       -- Identificador único com auto-incremento (BIGINT)
-    
-    VA_NUMMAT  VARCHAR(6),                      -- Número da matrícula do funcionário (até 6 caracteres)
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,       -- Identificador único com auto-incremento (BIGINT)
+   	ID_FPEMP BIGINT REFERENCES FPEMP(ID),       -- * Referenciar a empresa que estar um vível acima, nos casos de empresas Matriz ou Rolde	
+    ID_FPCD BIGINT REFERENCES FPCD(ID),				-- * FUNCIONÁRIOS
     VA_NUMLOT  VARCHAR(8),                      -- Número do lote de pagamento (até 8 caracteres)
     VA_DIA     VARCHAR(2),                      -- Dia do evento (até 2 caracteres)
     VA_ANOMES  VARCHAR(4),                      -- Ano e mês do evento (até 4 caracteres, ex: '202312' para dezembro de 2023)
@@ -2167,18 +1856,7 @@ CREATE TABLE FPRES (
     VA_RES     VARCHAR(1),                      -- Indicador de resultado (1 caractere)
     VA_INSIDE  VARCHAR(1),                      -- Indicador de verba interna ou externa (1 caractere)
     VA_VERBA   VARCHAR(1),                      -- Tipo de verba (1 caractere)
-    VA_FATOR   VARCHAR(5),                      -- Fator aplicado (até 5 caracteres)
-    VA_NUMEMP  FLOAT,                           -- Número da empresa (FLOAT, substituindo NUMERIC(2,0))
-    VA_NFILIAL FLOAT,                           -- Número da filial (FLOAT, substituindo NUMERIC(4,0))
-
-    -- Definição da chave primária clusterizada
-    CONSTRAINT PK_FPRES PRIMARY KEY CLUSTERED (VA_NUMMAT),
-
-    -- Chave estrangeira para vincular com a tabela FPEMP (empresa e filial)
-    CONSTRAINT FK_FPRES_FPEMP FOREIGN KEY (VA_NUMEMP, VA_NFILIAL)     REFERENCES FPEMP(ce_NUMEMP, ce_NFILIAL),
-
-    -- Chave estrangeira para vincular com a tabela FPCD (matrícula do funcionário)
-    CONSTRAINT FK_FPRES_FPCD FOREIGN KEY (VA_NUMMAT)     REFERENCES FPCD(CD_NUMMAT)
+    VA_FATOR   VARCHAR(5)
 );
 GO
 
