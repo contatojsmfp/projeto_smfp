@@ -1,12 +1,4 @@
 
-CREATE DATABASE FolhaPag
-
---Arquivo de Usuario :
-
-
-
-
-
 --Cadastro de Empresas
 /*
 Explicação dos Campos:
@@ -46,7 +38,7 @@ A chave primária foi mantida no campo ID, garantindo que cada registro tenha um
 
 */
 
---USE PESSOAL;
+--USE [FolhaPag];
 GO
 CREATE TABLE FPEMP (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,         -- Identificador único com auto-incremento (BIGINT)
@@ -54,13 +46,10 @@ CREATE TABLE FPEMP (
     --ce_NUMEMP  FLOAT,                           -- Número da empresa (FLOAT)
     ce_NFILIAL SMALLINT,                           -- Número da filial (FLOAT)
     --ce_SIGEMP  VARCHAR(2),                      -- Sigla da empresa (2 caracteres)
-    
-    -- Identificadores fiscais
-    ce_CNPJEMP       VARCHAR(18),                 -- CNPJ da empresa (18 dígitos)
-    ce_INSEST        VARCHAR(16),                 -- Inscrição estadual da empresa (16 caracteres)
+    CNPJ       VARCHAR(18),                           -- CNPJ 
     CE_RAZSOC  VARCHAR(14),                     -- Razão social da empresa (até 14 caracteres)
     CE_SENEMP  VARCHAR(30),                     -- Senha da empresa (até 30 caracteres)
-    CE_SEQDTA  DATE,                        -- Data de sequência de alguma operação
+    CE_SEQDTA  DATETIME,                        -- Data de sequência de alguma operação
     CE_SEQNSA  FLOAT,                           -- Sequência de notas fiscais (FLOAT)
     ce_PATH    VARCHAR(30),                     -- Caminho de armazenamento (até 30 caracteres)
     ce_TMP     VARCHAR(30),                     -- Caminho temporário de armazenamento (até 30 caracteres)
@@ -81,74 +70,72 @@ CREATE TABLE FPEMP (
     ce_DTRECINSS DATETIME,                      -- Data de recebimento do INSS
     ce_SIMPLES  FLOAT,                          -- Indicador de participação no Simples Nacional (FLOAT)
     ce_CTERCEIRO FLOAT
-
-    -- Informações de endereço
-    ce_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
-    ce_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
-    ce_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
-    ce_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
-    ce_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
-    
-    -- Atividades econômicas
-    ce_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
-    ce_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
-    
-    -- Quantidade de empregados e dependentes
-    ce_QTDPRO        FLOAT,                            -- Quantidade de profissionais
-    ce_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
-    
-    -- Informações financeiras e fiscais
-    ce_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
-    ce_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
-    ce_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
-    ce_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
-    
-    -- Valores diversos (IRRF, FGTS, etc.)
-    ce_VALARR        FLOAT,                            -- Valor arrecadado
-    ce_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
-    ce_DTATU         DATETIME,                         -- Data da última atualização
-    ce_DTINIPER      DATETIME,                         -- Data de início do período de apuração
-    
-    -- Informações adicionais
-    ce_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
-    ce_SALMES        VARCHAR(3),                       -- Salário do mês (código)
-    ce_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
-    ce_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
-    
-    -- Informações fiscais adicionais
-    ce_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
-    ce_CREEXEC       VARCHAR(3),                       -- Crédito executivo
-    ce_DBBEXEC       VARCHAR(3),                       -- Débito executivo
-    ce_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
-    ce_CREARR        VARCHAR(3),                       -- Crédito arrecadado
-    ce_DEBARR        VARCHAR(3),                       -- Débito arrecadado
-    
-    -- 13º Salário
-    ce_13SAL         VARCHAR(3),                       -- 13º salário
-    ce_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
-    ce_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
-    ce_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
-    ce_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
-    ce_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
-    
-    -- Outras informações de férias, salários e valores acumulados
-    ce_FERIAS        VARCHAR(3),                       -- Código referente a férias
-    ce_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
-    ce_VLSALFAM      FLOAT,                            -- Valor do salário-família
-    ce_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
-    
-    -- Outros valores e limites
-    ce_SALMIN        FLOAT,                            -- Salário mínimo
-    ce_TETIAP        FLOAT,                            -- Teto INSS
-    ce_ABADEP        FLOAT,                            -- Abatimento por dependente
-    ce_RECMIN        FLOAT,                            -- Recolhimento mínimo
-    ce_LIMDED        FLOAT,                            -- Limite de dedução
-    ce_VALISE        FLOAT,                            -- Valor de isenção
-    ce_PROLAB        FLOAT,                            -- Pro-labore
-    ce_VALHORA       FLOAT,   
-
 );
 GO
+novo fpemp
+USE [FolhaPag]
+GO
+
+/****** Object:  Table [dbo].[FPEMP]    Script Date: 01/11/2024 11:43:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FPEMP](
+[id] BIGINT IDENTITY(1,1) NOT NULL, --- Identificador único da tabela, campo `IDENTITY`.
+[id_fpemp] BIGINT NULL, --- Identificador da empresa pai (para relacionar com uma empresa matriz ou filial).
+[ce_nfilial] SMALLINT NULL, --- Número da filial, se aplicável.
+[ce_CNPJEMP] VARCHAR(18) NULL, --- CNPJ da empresa.
+[CE_RAZSOC] VARCHAR(40) NULL, --- Razão social da empresa (nome jurídico).
+[ce_nome_fant] VARCHAR(40) NULL, --- Nome fantasia da empresa (nome popular).
+[ce_inscest] VARCHAR(16) NULL, --- Inscrição estadual, usada para identificação em operações fiscais.
+[ce_inscmunic] VARCHAR(20) NULL, --- Inscrição municipal, usada para identificação fiscal no município.
+[ce_naturez_jur] VARCHAR(50) NULL, --- Natureza jurídica da empresa, como MEI, LTDA, EIRELI, etc.
+[ce_endemp] VARCHAR(30) NULL, --- Endereço da sede da empresa.
+[ce_num] INT NULL, --- Número do endereço.
+[ce_compl] VARCHAR(40) NULL, --- Complemento do endereço (ex: bloco, apto).
+[ce_baiemp] VARCHAR(20) NULL, --- Bairro da localização da empresa.
+[ce_cidemp] VARCHAR(20) NULL, --- Cidade onde a empresa está localizada.
+[ce_ufemp] CHAR(2) NULL, --- Unidade Federativa (Estado) da empresa (ex: SP, RJ).
+[ce_cep] VARCHAR(8) NULL, --- Código postal (CEP) do endereço da empresa.
+[ce_Telef] VARCHAR(15) NULL, --- Número de telefone para contato da empresa.
+[ce_contato_emp] VARCHAR(30) NULL, --- Nome do contato principal na empresa.
+[ce_e_mail] VARCHAR(MAX) NULL, --- Endereço de e-mail principal para comunicação com a empresa.
+[ce_dtini_ativ] DATE NULL, --- Data de início das atividades da empresa.
+[ce_sit_cadast] VARCHAR(20) NULL, --- Situação cadastral da empresa (ex: ativa, inativa).
+[ce_dtsit_cadast] DATE NULL, --- Data de atualização da situação cadastral.
+[ce_tipo_reg_trib] VARCHAR(50) NULL, --- Tipo de regime tributário da empresa (ex: Simples Nacional, Lucro Presumido).
+[ce_porte_emp] VARCHAR(50) NULL, --- Porte da empresa, como pequeno, médio ou grande.
+[ce_resp_nome] VARCHAR(40) NULL, --- Nome do responsável pela empresa.
+[ce_resp_cpf] VARCHAR(11) NULL, --- CPF do responsável pela empresa.
+[ce_resp_email] VARCHAR(100) NULL, --- E-mail do responsável pela empresa.
+[ce_resp_tel] VARCHAR(15) NULL, --- Telefone do responsável pela empresa.
+[ce_criado_em] DATETIME DEFAULT GETDATE(), --- Data de criação do registro, com valor padrão de `GETDATE()`.
+[ce_atual_em] DATETIME DEFAULT GETDATE(), --- Data de última atualização do registro, com valor padrão de `GETDATE()`.
+[ce_cibge_munemp] VARCHAR(6) NULL, --- Código do IBGE referente ao município da empresa.
+[ce_cibge_cidemp] VARCHAR(6) NULL, --- Código do IBGE referente à cidade da empresa.
+[ce_tipemp] FLOAT NULL, --- Tipo de empresa (pode representar classificações internas).
+[ce_CLASSE] VARCHAR(3) NULL, --- Classe de classificação da empresa.
+[ce_CNAE] VARCHAR(MAX) NULL, --- Código Nacional de Atividades Econômicas, indicando a atividade principal da empresa.
+[ce_aliqsatemp] FLOAT NULL, --- Alíquota de SAT (Seguro Acidente de Trabalho) da empresa.
+[ce_cfpas_emp] VARCHAR(30) NULL, --- Código do FPAS (Fundo de Previdência e Assistência Social).
+[ce_CAT_EMP] VARCHAR(1) NULL, --- Categoria da empresa (classificação adicional).
+[ce_bco_emp] FLOAT NULL, --- Número do banco da conta da empresa.
+[ce_age_emp] FLOAT NULL, --- Número da agência bancária da empresa.
+[ce_cta_dig_emp] FLOAT NULL, --- Conta e dígito verificador da conta bancária da empresa.
+[ce_ninss_emp] VARCHAR(30) NULL, --- Número do INSS da empresa.
+[ce_indinss] BIT NULL, --- Indicador de contribuição ao INSS (1 para sim, 0 para não).
+[ce_dtrecinss] DATE NULL, --- Data de recebimento da contribuição ao INSS.
+[ce_simplnac_emp] BIT NULL, --- Indicador de adesão ao Simples Nacional (1 para sim, 0 para não).
+[ce_codterceiro] FLOAT NULL, --- Código de terceiros para contribuição (ex: SESCOOP, SENAC).
+[ce_ATVPRI] VARCHAR(4) NULL, --- Código da atividade principal.
+[ce_ATVSEC] VARCHAR(4) NULL, --- Código da atividade secundária.
+[ce_bcopis] VARCHAR(3) NULL, --- Código do banco específico para PIS.
+[ce_agepis] VARCHAR(4) NULL, --- Código da agência para depósito de PIS.
+[ce_digpis] VARCHAR(1) NULL, --- Dígito verificador da conta PIS.
+[ce_mensag] VARCHAR(50) NULL --- Campo para observações ou mensagens adicionais.
+
 
 
 -- Cadastro de funcionarios 
@@ -192,10 +179,10 @@ CREATE TABLE FPCD (
     CD_RACOR         VARCHAR(10),                  -- Raça/Cor (eSocial)
     CD_CORCAB        VARCHAR(10),                  -- Cor do cabelo
     CD_COROLH        VARCHAR(10),                  -- Cor dos olhos
-    CD_TceANG        VARCHAR(2),                   -- Tipo sanguíneo do funcionário
-    CD_NUMCTP        VARCHAR(7),                   -- Número da Carteira de Trabalho e Previdência Social (CTce)
-    CD_SERCTP        VARCHAR(5),                   -- Série da CTce
-    CD_ESTCTP        VARCHAR(2),                   -- Estado emissor da CTce
+    CD_TPSANG        VARCHAR(2),                   -- Tipo sanguíneo do funcionário
+    CD_NUMCTP        VARCHAR(7),                   -- Número da Carteira de Trabalho e Previdência Social (CTPS)
+    CD_SERCTP        VARCHAR(5),                   -- Série da CTPS
+    CD_ESTCTP        VARCHAR(2),                   -- Estado emissor da CTPS
     CD_NUMRG         VARCHAR(11),                  -- Número do RG
     CD_ORGEMRG       VARCHAR(3),                   -- Órgão emissor do RG
     CD_ESTRG         VARCHAR(2),                   -- Estado emissor do RG
@@ -391,9 +378,9 @@ GO
 -Resumo: das Obrigacoes - analise feito abaixo para definicao de tabelas.
 
 •	FGTS: GRF (via SEFIP ou Conectividade Social)
-•	INSS: Gce (via folha de pagamento ou SEFIP)
+•	INSS: GPS (via folha de pagamento ou SEFIP)
 •	IRRF: DARF (via folha de pagamento)
-•	Contribuições ao Sistema S: Gce (via folha de pagamento ou SEFIP)
+•	Contribuições ao Sistema S: GPS (via folha de pagamento ou SEFIP)
 •	CAGED: Arquivo eletrônico (via folha de pagamento ou sistema específico)
 •	RAIS: Arquivo eletrônico (via folha de pagamento ou sistema da RAIS)
 •	DIRF: Arquivo eletrônico (via folha de pagamento ou Receitanet)
@@ -419,9 +406,9 @@ Situação: Substituída a partir de 2024. A DIRF será substituída por informa
 As demais obrigações ainda funcionam, embora algumas tenham sido integradas a outros sistemas:
 
 FGTS: GRF (via SEFIP ou Conectividade Social): A GRF ainda pode ser enviada via SEFIP ou Conectividade Social, mas há uma tendência de integração ao eSocial.
-INSS: Gce (via folha de pagamento ou SEFIP): Ainda é utilizado, mas muitas informações previdenciárias são transmitidas pelo eSocial e DCTFWeb.
+INSS: GPS (via folha de pagamento ou SEFIP): Ainda é utilizado, mas muitas informações previdenciárias são transmitidas pelo eSocial e DCTFWeb.
 IRRF: DARF (via folha de pagamento): Continua funcionando.
-Contribuições ao Sistema S: Gce: Ainda em uso via Gce, mas informações estão integradas ao eSocial.
+Contribuições ao Sistema S: GPS: Ainda em uso via GPS, mas informações estão integradas ao eSocial.
 eSocial: Continua sendo a principal plataforma de envio de informações trabalhistas e previdenciárias.
 EFD-Reinf: Funciona como parte do processo de envio de informações de retenção de tributos.
 DCTFWeb: Continua em funcionamento como obrigação para transmissão de débitos e créditos fiscais.
@@ -440,12 +427,12 @@ DIRF (Substituída pelo eSocial e EFD-Reinf a partir de 2024)
 
 */
 --Obrigacoes 
---Estrutura da Tabela para Geração da Gce:f
---Gce Funciona dentro do e-social e uma rubrica
+--Estrutura da Tabela para Geração da GPS:f
+--Gps Funciona dentro do e-social e uma rubrica
 
 
-CREATE TABLE Gce_GENERACAO (
-    ID BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da Gce
+CREATE TABLE GPS_GENERACAO (
+    ID BIGINT IDENTITY(1,1) PRIMARY KEY,      -- Identificador único da GPS
 	ID_FPEMP BIGINT REFERENCES FPEMP(ID),   -- * Empresa
     CD_COMPETENCIA VARCHAR(7) NOT NULL,           -- Competência (mês/ano) no formato MM/YYYY
     CD_NUMEMPREGADO VARCHAR(11),                  -- CPF do empregado (caso haja individualização)
@@ -456,15 +443,15 @@ CREATE TABLE Gce_GENERACAO (
     VL_RAT DECIMAL(15, 2),                        -- Valor do RAT (Risco Ambiental de Trabalho)
     VL_OUTRAS_ENTIDADES DECIMAL(15, 2),           -- Contribuição devida a outras entidades e fundos (Sistema S)
     VL_TOTAL_INSS DECIMAL(15, 2),                 -- Total da contribuição previdenciária a ser recolhida
-    DT_VENCIMENTO DATETIME,                       -- Data de vencimento da Gce
-    CD_CODIGO_PAGAMENTO VARCHAR(4),               -- Código de pagamento da Gce (ex: 2100, 2003)
+    DT_VENCIMENTO DATETIME,                       -- Data de vencimento da GPS
+    CD_CODIGO_PAGAMENTO VARCHAR(4),               -- Código de pagamento da GPS (ex: 2100, 2003)
     CD_TIPO_EMPRESA VARCHAR(1),                   -- Tipo da empresa (Simples Nacional, Lucro Presumido, etc.)
     CD_COD_SEFIP VARCHAR(2),                      -- Código da SEFIP para classificação (ex: 115, 150)
     CD_SITUACAO  VARCHAR(1) DEFAULT 'A',       -- Situação do pagamento (A: Aberto, P: Pago)
     CD_BANCO_PAGAMENTO VARCHAR(3),                -- Código do banco onde o pagamento será efetuado
     CD_AGENCIA_PAGAMENTO VARCHAR(4),              -- Código da agência onde o pagamento será efetuado
     CD_CONTA_PAGAMENTO VARCHAR(10),               -- Número da conta para pagamento
-    DT_PAGAMENTO DATETIME                         -- Data de pagamento da Gce
+    DT_PAGAMENTO DATETIME                         -- Data de pagamento da GPS
 );
 GO
 
@@ -574,7 +561,7 @@ CREATE TABLE rubricas_esocial (
 -------------------------------------------------------------------------------------------------------
 --Tabela de grupo conforme -
 --Grupo, Grupo Pai, Nível Descrição Ocor., Chave Condição , com base 
- --no layout Versão S-1.2 (cons. até NT 02/2024 rev.) --(aprovada pela Portaria Conjunta RFB/Mce/MTE
+ --no layout Versão S-1.2 (cons. até NT 02/2024 rev.) --(aprovada pela Portaria Conjunta RFB/MPS/MTE
  -- nº 44, de 11/08/2023 – DOU de -17/08/2023) em sql comentada,
 
 CREATE TABLE resumo_registro_esocial (
@@ -621,7 +608,7 @@ GO
 /*CRIE TABELAS •	EFD-Reinf: Arquivo eletrônico (via sistema contábil)
 •	DCTFWeb: Arquivo eletrônico (via e-CAC)
 •	GRRF: Guia para rescisão (via Conectividade Social), com base  no layout Versão S-1.2 (cons. até NT 02/2024 rev.)
-(aprovada pela Portaria Conjunta RFB/Mce/MTE nº 44, de 11/08/2023 – DOU de
+(aprovada pela Portaria Conjunta RFB/MPS/MTE nº 44, de 11/08/2023 – DOU de
 17/08/2023) em sql comentada 
 
 --TABELA 
@@ -745,120 +732,120 @@ GO
 
 -------------------------------------------------------------------------------------------------------------------
 
---Arquivo com dados fixos - fpce
---W_FPce:=  "F:\FOLHA\"+W_SIGEMP+"\"+W_SIGEMP+'FPce.DBF'
+--Arquivo com dados fixos - fpps
+--W_FPPS:=  "F:\FOLHA\"+W_SIGEMP+"\"+W_SIGEMP+'FPPS.DBF'
 
----IF !FILE("&W_FPce")   
+---IF !FILE("&W_FPPS")   
 
 -- // Arquivo de Empresas-- 
---Criação da tabela FPce (Dados da Empresa Filial):
+--Criação da tabela FPPS (Dados da Empresa Filial):
 
 --USE PESSOAL;
 --GO
 
---CREATE TABLE FPce (
+--CREATE TABLE FPPS (
 --    ID BIGINT IDENTITY(1,1) PRIMARY KEY, -- Identificador único do registro (chave primária com auto-incremento)
     
 --    -- Campos da empresa
---    ce_SIGEMP        VARCHAR(2),                       -- Sigla da empresa (2 caracteres)
---    ce_NUMEMP        FLOAT,                            -- Número da empresa
---    ce_NFILIAL       FLOAT,                            -- Número da filial
+--    ps_SIGEMP        VARCHAR(2),                       -- Sigla da empresa (2 caracteres)
+--    ps_NUMEMP        FLOAT,                            -- Número da empresa
+--    ps_NFILIAL       FLOAT,                            -- Número da filial
     
 --    -- Informações de endereço
---    ce_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
---    ce_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
---    ce_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
---    ce_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
---    ce_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
+--    ps_endemp        VARCHAR(30),                      -- Endereço da empresa (30 caracteres)
+--    ps_BAIEMP        VARCHAR(20),                      -- Bairro da empresa (20 caracteres)
+--    ps_CIDEMP        VARCHAR(20),                      -- Cidade da empresa (20 caracteres)
+--    ps_CEPEMP        VARCHAR(8),                       -- CEP da empresa (8 caracteres)
+--    ps_ESTEMP        VARCHAR(2),                       -- Estado da empresa (2 caracteres)
     
 --    -- Identificadores fiscais
---    ce_CNPJEMP       VARCHAR(14),                      -- CNPJ da empresa (14 dígitos)
---    ce_INSEST        VARCHAR(16),                      -- Inscrição estadual da empresa (16 caracteres)
+--    ps_CNPJEMP       VARCHAR(14),                      -- CNPJ da empresa (14 dígitos)
+--    ps_INSEST        VARCHAR(16),                      -- Inscrição estadual da empresa (16 caracteres)
     
 --    -- Atividades econômicas
---    ce_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
---    ce_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
+--    ps_ATVPRI        VARCHAR(4),                       -- Código da atividade principal (4 caracteres)
+--    ps_ATVSEC        VARCHAR(4),                       -- Código da atividade secundária (4 caracteres)
     
 --    -- Quantidade de empregados e dependentes
---    ce_QTDPRO        FLOAT,                            -- Quantidade de profissionais
---    ce_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
+--    ps_QTDPRO        FLOAT,                            -- Quantidade de profissionais
+--    ps_QTDFAM        FLOAT,                            -- Quantidade de familiares dependentes
     
 --    -- Informações financeiras e fiscais
---    ce_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
---    ce_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
---    ce_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
---    ce_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
+--    ps_SENEMP        VARCHAR(15),                      -- Senha de acesso da empresa (15 caracteres)
+--    ps_BAMPIS        VARCHAR(3),                       -- Banco para recolhimento de PIS
+--    ps_AGEPIS        VARCHAR(4),                       -- Agência do banco para PIS
+--    ps_DIGPIS        VARCHAR(1),                       -- Dígito verificador do PIS
     
 --    -- Valores diversos (IRRF, FGTS, etc.)
---    ce_VALARR        FLOAT,                            -- Valor arrecadado
---    ce_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
---    ce_DTATU         DATETIME,                         -- Data da última atualização
---    ce_DTINIPER      DATETIME,                         -- Data de início do período de apuração
+--    ps_VALARR        FLOAT,                            -- Valor arrecadado
+--    ps_PERQZN        FLOAT,                            -- Percentual aplicado para determinada zona
+--    ps_DTATU         DATETIME,                         -- Data da última atualização
+--    ps_DTINIPER      DATETIME,                         -- Data de início do período de apuração
     
 --    -- Informações adicionais
---    ce_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
---    ce_SALMES        VARCHAR(3),                       -- Salário do mês (código)
---    ce_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
---    ce_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
+--    ps_MENSAG        VARCHAR(50),                      -- Mensagem adicional ou aviso
+--    ps_SALMES        VARCHAR(3),                       -- Salário do mês (código)
+--    ps_SALFAM        VARCHAR(3),                       -- Valor de salário-família (código)
+--    ps_VBRISCO       VARCHAR(3),                       -- Valor bruto de risco (código)
     
 --    -- Informações fiscais adicionais
---    ce_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
---    ce_CREEXEC       VARCHAR(3),                       -- Crédito executivo
---    ce_DBBEXEC       VARCHAR(3),                       -- Débito executivo
---    ce_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
---    ce_CREARR        VARCHAR(3),                       -- Crédito arrecadado
---    ce_DEBARR        VARCHAR(3),                       -- Débito arrecadado
+--    ps_IAPAS         VARCHAR(3),                       -- Código de recolhimento ao INSS
+--    ps_CREEXEC       VARCHAR(3),                       -- Crédito executivo
+--    ps_DBBEXEC       VARCHAR(3),                       -- Débito executivo
+--    ps_IRFONTE       VARCHAR(3),                       -- Imposto de renda na fonte (código)
+--    ps_CREARR        VARCHAR(3),                       -- Crédito arrecadado
+--    ps_DEBARR        VARCHAR(3),                       -- Débito arrecadado
     
 --    -- 13º Salário
---    ce_13SAL         VARCHAR(3),                       -- 13º salário
---    ce_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
---    ce_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
---    ce_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
---    ce_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
---    ce_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
+--    PS_13SAL         VARCHAR(3),                       -- 13º salário
+--    ps_ADI13S        VARCHAR(3),                       -- Adiantamento do 13º salário
+--    ps_DESC13S       VARCHAR(3),                       -- Desconto do 13º salário
+--    ps_IAPA13        VARCHAR(3),                       -- Código INSS 13º salário
+--    ps_DIF13C        VARCHAR(3),                       -- Diferença de cálculo 13º salário (código)
+--    ps_DIF13D        VARCHAR(3),                       -- Diferença de desconto 13º salário (código)
     
 --    -- Outras informações de férias, salários e valores acumulados
---    ce_FERIAS        VARCHAR(3),                       -- Código referente a férias
---    ce_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
---    ce_VLSALFAM      FLOAT,                            -- Valor do salário-família
---    ce_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
+--    ps_FERIAS        VARCHAR(3),                       -- Código referente a férias
+--    ps_DIFSAL        VARCHAR(3),                       -- Diferença salarial (código)
+--    ps_VLSALFAM      FLOAT,                            -- Valor do salário-família
+--    ps_VLSALFAM1     FLOAT,                            -- Valor do salário-família 1
     
 --    -- Outros valores e limites
---    ce_SALMIN        FLOAT,                            -- Salário mínimo
---    ce_TETIAP        FLOAT,                            -- Teto INSS
---    ce_ABADEP        FLOAT,                            -- Abatimento por dependente
---    ce_RECMIN        FLOAT,                            -- Recolhimento mínimo
---    ce_LIMDED        FLOAT,                            -- Limite de dedução
---    ce_VALISE        FLOAT,                            -- Valor de isenção
---    ce_PROLAB        FLOAT,                            -- Pro-labore
---    ce_VALHORA       FLOAT,                            -- Valor da hora trabalhada
+--    ps_SALMIN        FLOAT,                            -- Salário mínimo
+--    ps_TETIAP        FLOAT,                            -- Teto INSS
+--    ps_ABADEP        FLOAT,                            -- Abatimento por dependente
+--    ps_RECMIN        FLOAT,                            -- Recolhimento mínimo
+--    ps_LIMDED        FLOAT,                            -- Limite de dedução
+--    ps_VALISE        FLOAT,                            -- Valor de isenção
+--    ps_PROLAB        FLOAT,                            -- Pro-labore
+--    ps_VALHORA       FLOAT,                            -- Valor da hora trabalhada
 
---    -- Chave estrangeira para vincular FPce à tabela FPEMP
---    CONSTRAINT FK_FPce_FPEMP FOREIGN KEY (ce_NUMEMP) REFERENCES FPEMP(ce_NUMEMP),
+--    -- Chave estrangeira para vincular FPPS à tabela FPEMP
+--    CONSTRAINT FK_FPPS_FPEMP FOREIGN KEY (ps_NUMEMP) REFERENCES FPEMP(ce_NUMEMP),
     
 --    -- Definição de chaves e índices
---    CONSTRAINT PK_FPce PRIMARY KEY CLUSTERED (ce_NUMEMP), -- Chave primária com índice clusterizado
---    CONSTRAINT UNQ_FPce_CNPJ UNIQUE NONCLUSTERED (ce_CNPJEMP) -- CNPJ deve ser único
+--    CONSTRAINT PK_FPPS PRIMARY KEY CLUSTERED (ps_NUMEMP), -- Chave primária com índice clusterizado
+--    CONSTRAINT UNQ_FPPS_CNPJ UNIQUE NONCLUSTERED (ps_CNPJEMP) -- CNPJ deve ser único
 --);
 --GO
-----Vinculando a tabela FPCD com FPce (Empresa e Filial):
----- Vinculando FPCD com FPce considerando empresa (CD_NUMEMP) e filial (CD_NFILIAL)
+----Vinculando a tabela FPCD com FPPS (Empresa e Filial):
+---- Vinculando FPCD com FPPS considerando empresa (CD_NUMEMP) e filial (CD_NFILIAL)
 --ALTER TABLE FPCD 
---ADD CONSTRAINT FK_FPCD_FPce FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) REFERENCES FPce(ce_NUMEMP, ce_NFILIAL);
+--ADD CONSTRAINT FK_FPCD_FPPS FOREIGN KEY (CD_NUMEMP, CD_NFILIAL) REFERENCES FPPS(ps_NUMEMP, ps_NFILIAL);
 --GO
 -------------------------------------------------------------------------------------------------------
 
 --Criação da tabela FPRL (Valores Acumulados Quinzena):
 /*
 Explicações sobre as tabelas:
-Fce :
+FPS :
 
 Contém informações sobre a empresa e sua filial, como CNPJ, endereço, e dados relacionados a negociações e valores fiscais.
-Há uma chave primária composta pelo número da empresa ( ce_NUMEMP ) e filial ( ce_NFILIAL ), vinculada à tabela FPEMP .
-Definido um índice único para o campo ce_CNPJEMP para garantir a unicidade do CNPJ.
+Há uma chave primária composta pelo número da empresa ( ps_NUMEMP ) e filial ( ps_NFILIAL ), vinculada à tabela FPEMP .
+Definido um índice único para o campo ps_CNPJEMP para garantir a unicidade do CNPJ.
 FPCD :
 
-Foi adicionada uma chave estrangeira para vincular a tabela de cadastro de funcionários FPCD com FPce , com base no número da empresa e filial.
+Foi adicionada uma chave estrangeira para vincular a tabela de cadastro de funcionários FPCD com FPPS , com base no número da empresa e filial.
 FPRL :
 
 Essa tabela armazena os valores acumulados de proventos e descontos para cada quinzena, como FGTS, INSS e IRRF.
@@ -1571,7 +1558,7 @@ Informações da Empresa e Filial:
 DF_NUMEMP: Número identificador da empresa.
 DF_NFILIAL: Número identificador da filial.
 Vínculos Criados:
-Vínculo com FPEMP: Os campos DF_NUMEMP e DF_NFILIAL referenciam a tabela FPEMP através dos campos ce_NUMEMP e ce_NFILIAL, respectivamente. Isso garante que cada registro esteja associado a uma empresa e filial existentes.
+Vínculo com FPEMP: Os campos DF_NUMEMP e DF_NFILIAL referenciam a tabela FPEMP através dos campos ps_NUMEMP e ps_NFILIAL, respectivamente. Isso garante que cada registro esteja associado a uma empresa e filial existentes.
 
 Vínculo com FPCD: O campo DF_NUMMAT referencia a tabela FPCD através do campo CD_NUMMAT, garantindo a associação correta com a matrícula do funcionário.
 
@@ -1669,7 +1656,7 @@ RA_GRINST: Grau de instrução do funcionário.
 RA_NACION: Nacionalidade do funcionário.
 RA_ANOCHE: Ano de chegada ao Brasil (se aplicável).
 RA_SALBAS: Salário base do funcionário.
-RA_TIceAL: Tipo de salário (mensal, semanal, etc.).
+RA_TIPSAL: Tipo de salário (mensal, semanal, etc.).
 RA_HORSEM: Horas semanais de trabalho.
 RA_DDMMRE: Data de rescisão do contrato (dia/mês).
 RA_CODRES: Código do motivo de rescisão.
@@ -1712,7 +1699,7 @@ CREATE TABLE FPRA (
     RA_NACION  VARCHAR(2),                       -- Nacionalidade do funcionário (2 caracteres)
     RA_ANOCHE  VARCHAR(2),                       -- Ano de chegada ao Brasil, se aplicável (2 caracteres)
     RA_SALBAS  VARCHAR(9),                       -- Salário base do funcionário (9 caracteres)
-    RA_TIceAL  VARCHAR(1),                       -- Tipo de salário (1 caractere)
+    RA_TIPSAL  VARCHAR(1),                       -- Tipo de salário (1 caractere)
     RA_HORSEM  VARCHAR(2),                       -- Horas semanais trabalhadas (2 caracteres)
     RA_DDMMRE  VARCHAR(4),                       -- Data de rescisão (4 caracteres)
     RA_CODRES  VARCHAR(1),                       -- Código do motivo de rescisão (1 caractere)
